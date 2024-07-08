@@ -1,50 +1,118 @@
 @import url("photographer.css");
 
 body {
-    font-family: "DM Sans", sans-serif;
-    margin: 0;
+  font-family: "DM Sans", sans-serif;
+  margin: 0;
+  padding-bottom: 100px;
 }
 
-
 header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 90px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 90px;
 }
 
 h1 {
-    color: #901C1C;
-    margin-right: 100px;
+  color: #901c1c;
+  margin-right: 100px;
 }
 
 .logo {
-    height: 50px;
-    margin-left: 100px;
+  height: 50px;
+  margin-left: 100px;
 }
 
 .photographer_section {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 70px;
-    margin-top: 100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 90px;
+  margin-top: 100px;
 }
 
+/**** Sens des vignettes entre elles ****/
 .photographer_section article {
-    justify-self: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/**** Sens à l'interieur de la vignette ****/
+.photographer_section article a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: inherit; /* Maintient la couleur actuelle du texte */
 }
 
 .photographer_section article h2 {
-    color: #D3573C;
-    font-size: 36px;
+  color: #d3573c;
+  font-size: 36px;
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+/*** Effet de soulignement sur le titre h2 ***/
+.photographer_section article h2::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #d3573c;
+  visibility: hidden;
+  transform: scaleX(0);
+  transition: all 0.3s ease-in-out;
+}
+.photographer_section a:hover h2::after,
+.photographer_section a:focus h2::after {
+  visibility: visible;
+  transform: scaleX(1);
+}
+/****************************************/
+
+.photographer_section article h3 {
+  color: #d3573c;
+  font-size: 20px;
+  margin-top: -20px;
+  margin-bottom: 5px;
+}
+
+.photographer_section article p {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.photographer_section article span {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 300;
+  margin-top: 5px;
 }
 
 .photographer_section article img {
-    height: 200px;
-    width: 200px;
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Styles pour la vignette/lien des photographes */
+.photographer_section a {
+  text-decoration: none;
+  color: inherit; /* Maintient la couleur actuelle du texte */
+}
+
+/* Supprime le contour par défaut */
+.photographer_section a:hover,
+.photographer_section a:focus {
+  outline: none;
 }
