@@ -25,7 +25,34 @@ async function getPhotographers() {
 // "try/catch" ou "throw new error" pour centraliser et gérer nous-même les erreurs si il y en a. Donc la console ne pourra plus afficher "uncaught".
 
 
-/////// INSERTION DES ELEMENTS VIGNETTES DANS LE DOM ///////////
+// Fonction pour récupérer l'ID du photographe à partir de l'URL
+function getPhotographerIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
+
+// Fonction pour afficher les informations spécifiques d'un photographe
+async function displayPhotographerDetails(photographerId) {
+    const photographers = await getPhotographers();
+    const photographer = photographers.find(p => p.id == photographerId);
+
+    if (photographer) {
+        const photographerModel = photographerTemplate(photographer);
+        const { h2, h3, strong, img } = photographerModel.getSpecificElements();
+
+        const infoSection = document.querySelector(".photograph-info");
+        infoSection.appendChild(h2);
+        infoSection.appendChild(h3);
+        infoSection.appendChild(strong);
+
+        const imageSection = document.querySelector(".photograph-image");
+        imageSection.appendChild(img);
+    } else {
+        console.error('Photographe non trouvé');
+    }
+}
+
+/////// INSERTION DES ELEMENTS VIGNETTES DANS LE DOM POUR LA PAGE D'ACCUEIL ///////////
 async function displayData(photographers) {
     // Récupération de la section où l'on veut insérer les vignettes
     const photographersSection = document.querySelector(".photographer_section");
@@ -38,14 +65,20 @@ async function displayData(photographers) {
     });
 }
 
-//// AFFICHAGE FINAL DES VIGNETTES SUR LA PAGE WEB /////
+
+
+//// AFFICHAGES FINAL /////
 async function init() {
-    // Récupère les datas des photographes..
-    const photographers = await getPhotographers();
-    if (photographers) {
-        //.. et l'affiche
-        displayData(photographers);
+    const photographerId = getPhotographerIdFromUrl();
+    if (photographerId) {
+        await displayPhotographerDetails(photographerId);
+    } else {
+        const photographers = await getPhotographers();
+        if (photographers) {
+            displayData(photographers);
+        }
     }
 }
+
 // Ici, un écouteur d'évènement qui permet l'activation de la fonction finale lorsque le DOM est complètement chargé
 document.addEventListener('DOMContentLoaded', init);

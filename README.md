@@ -1,6 +1,5 @@
-# Base de code du projet P6 - Parcours Front-end
+# Projet 6 - FISHEYE
 
-## Démarrer le projet
+Site web qui permet aux photographes indépendants de présenter leurs meilleurs travaux.
 
-Rien à installer ici, il suffit d'ouvrir le fichier `index.html`.
-
+Création d'une application web accessible, modulaire et utilisant des design patterns en JavaScript.

@@ -117,7 +117,11 @@ header a:focus-visible,
   font-size: 36px;
   position: relative;
   display: inline-block;
-  transition: color 0.3s ease;
+}
+@media screen and (max-width: 1088px) {
+  .photographer_section article h2 {
+    font-size: 30px;
+  }
 }
 
 /*** Effet de soulignement sur le titre h2 ***/
@@ -151,6 +155,11 @@ header a:focus-visible,
   color: #000000;
   font-size: 16px;
   font-weight: 500;
+}
+@media screen and (max-width: 1088px) {
+  .photographer_section article p {
+    font-size: 14px;
+  }
 }
 
 .photographer_section article span {

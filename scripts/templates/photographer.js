@@ -3,9 +3,11 @@
 export function photographerTemplate(data) {
     // Infos diverses photographes = données JSON
     const { id,name, portrait, city, country, tagline, price } = data;
+    
     // Chemin vers l'image dans dossier assets selon le nom du photographe en question
     const picture = `assets/photographers/Photographers ID Photos/${portrait}`;
 
+    // FONCTION POUR LA PAGE D'ACCUEIL
     function getUserCardDOM() {
         // Création de la balise <article> pour L'emplacement de la vignette...
         const article = document.createElement( 'article' );
@@ -58,8 +60,27 @@ export function photographerTemplate(data) {
         return (article);
         
     }
-    // Retourne un objet qui contient des données sur le photographe et une méthode pour créer un élément DOM. Cet objet peut être utilisé pour gérer et manipuler les informations et le rendu des vignettes des photographes de manière plus flexible et structurée.
-    const result = { name, picture, getUserCardDOM };
-    console.log(result); 
+
+    function getSpecificElements() {
+        const h2 = document.createElement('h2');
+        h2.textContent = name;
+
+        const h3 = document.createElement('h3');
+        h3.textContent = `${city}, ${country}`;
+
+        const strong = document.createElement('strong');
+        strong.textContent = tagline;
+
+        const img = document.createElement('img');
+        img.setAttribute("src", picture);
+        img.setAttribute("alt", name);
+
+        const elements = { h2, h3, strong, img };
+        console.log(elements);
+        return elements;
+    }
+
+    const result = { name, picture, getUserCardDOM, getSpecificElements };
+    console.log(result);
     return result;
 }
