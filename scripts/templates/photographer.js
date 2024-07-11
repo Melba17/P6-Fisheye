@@ -7,7 +7,7 @@ export function photographerTemplate(data) {
     // Chemin vers l'image dans dossier assets selon le nom du photographe en question
     const picture = `assets/photographers/Photographers ID Photos/${portrait}`;
 
-    // FONCTION POUR LA PAGE D'ACCUEIL
+    /// FONCTION POUR LA PAGE D'ACCUEIL ///
     function getUserCardDOM() {
         // Création de la balise <article> pour L'emplacement de la vignette...
         const article = document.createElement( 'article' );
@@ -61,6 +61,7 @@ export function photographerTemplate(data) {
         
     }
 
+    /// FONCTION POUR LA BANNIERE DE PRESENTATION INDIVIDUELLE DU PHOTOGRAPHE ///
     function getSpecificElements() {
         const h2 = document.createElement('h2');
         h2.textContent = name;
@@ -75,12 +76,17 @@ export function photographerTemplate(data) {
         img.setAttribute("src", picture);
         img.setAttribute("alt", name);
 
+        // Création d'un objet spécifique..
         const elements = { h2, h3, strong, img };
+        // .. qui est affiché dans la console (peut servir en cas de déboggage) pour voir sa structure
         console.log(elements);
+        // la fonction "getSpecificElements" retourne l'objet elements, ce qui permet à d'autres parties du code d'accéder aux balises HTML encapsulées dans cet objet
         return elements;
     }
-
+    // Création d'un objet "result" à partir des données initiales et des fonctions précédemment créées
     const result = { name, picture, getUserCardDOM, getSpecificElements };
+    // Affichage dans la console
     console.log(result);
+    // La fonction photographerTemplate retourne l'objet "result", ce qui permet à d'autres parties du code d'accéder aux données du photographe ainsi qu'aux méthodes pour créer les vignettes et les éléments spécifiques selon les pages web
     return result;
 }

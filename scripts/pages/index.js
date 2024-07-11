@@ -24,33 +24,46 @@ async function getPhotographers() {
 }
 // "try/catch" ou "throw new error" pour centraliser et gérer nous-même les erreurs si il y en a. Donc la console ne pourra plus afficher "uncaught".
 
-
-// Fonction pour récupérer l'ID du photographe à partir de l'URL
+/////////////////// 2 FONCTIONS INTERDEPENDANTES : LA 1ERE EXTRAT l'ID DU PHOTOGRAPHE À PARTIR DE L'URL - LA 2EME UTILISE CET ID POUR AFFICHER LES DETAILS DU PHOTOGRAPHE DANS SA BANNIERE ////////////////////
+// Fonction pour récupérer l'ID du photographe à partir de l'URL/page web où l'on se trouve
 function getPhotographerIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
+    // Création de l'objet URL / "new URL" crée un nouvel objet URL basé sur cette URL complète / "window.location.href" récupère l'URL complète actuellement affichée dans la barre d'adresse du navigateur = en facilite la manipulation
+    const url = new URL(window.location.href);
+    // Récupère et retourne l'id du photographe en question situé à la fin de l'url (ex : ?id=243)
+    return url.searchParams.get('id');
 }
 
-// Fonction pour afficher les informations spécifiques d'un photographe
+// Fonction asynchrone pour afficher les informations spécifiques d'un photographe dans sa bannière en fonction de son ID
 async function displayPhotographerDetails(photographerId) {
+    // Récupération des données JSON globales contenant la liste des photographes / fonction getPhotographers() ci-dessus
     const photographers = await getPhotographers();
+    // Recherche du photographe correspondant à l'ID fourni donc parcourt la liste des photographes et retourne le photographe dont l'ID correspond à photographerId
     const photographer = photographers.find(p => p.id == photographerId);
 
+    // // Vérification si le photographe a été trouvé
     if (photographer) {
+        // Génération du modèle de photographe en utilisant la fonction template du fichier "photographer.js" dans le dossier "templates"
         const photographerModel = photographerTemplate(photographer);
+        // Extraction des éléments spécifiques du modèle du photographe
         const { h2, h3, strong, img } = photographerModel.getSpecificElements();
 
+        // Sélection de la section d'information sur le photographe dans le DOM
         const infoSection = document.querySelector(".photograph-info");
+        // Ajout des éléments d'information (titre, sous-titre, etc.) à la section d'information
         infoSection.appendChild(h2);
         infoSection.appendChild(h3);
         infoSection.appendChild(strong);
-
+        // Sélection de la section de l'image du photographe dans le DOM
         const imageSection = document.querySelector(".photograph-image");
+        // Ajout de l'image du photographe à la section de l'image
         imageSection.appendChild(img);
     } else {
+        // Affichage d'une erreur dans la console si le photographe n'a pas été trouvé
         console.error('Photographe non trouvé');
     }
 }
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 /////// INSERTION DES ELEMENTS VIGNETTES DANS LE DOM POUR LA PAGE D'ACCUEIL ///////////
 async function displayData(photographers) {
@@ -67,7 +80,7 @@ async function displayData(photographers) {
 
 
 
-//// AFFICHAGES FINAL /////
+//// AFFICHAGES FINAUX /////
 async function init() {
     const photographerId = getPhotographerIdFromUrl();
     if (photographerId) {
@@ -79,6 +92,5 @@ async function init() {
         }
     }
 }
-
-// Ici, un écouteur d'évènement qui permet l'activation de la fonction finale lorsque le DOM est complètement chargé
-document.addEventListener('DOMContentLoaded', init);
+// Activation/Appel de la fonction
+init()

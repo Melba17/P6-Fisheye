@@ -1,3 +1,4 @@
+/********** Bannière Photographe **********/
 .photograph-header {
   background-color: #fafafa;
   height: 300px;
@@ -6,20 +7,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 0 50px;
 }
 
 .photograph-info {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Espace entre les éléments */
+  gap: 10px;
+}
+.photograph-info h2 {
+  color: #d3573c;
+  font-size: 60px;
+  margin-top: auto;
+}
+.photograph-info h3 {
+  color: #d3573c;
+  font-size: 30px;
+  margin-top: -35px;
+}
+.photograph-info strong {
+  font-size: 20px;
 }
 
-.photograph-image {
+.photograph-image img {
   display: flex;
   align-items: center;
-  height: 200px;
-  width: 200px;
+  height: 220px;
+  width: 220px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -42,8 +56,17 @@
 .contact_button:focus-visible {
   background-color: #d3573c;
   color: black;
+  outline: 3px solid;
 }
 
+/**************** GALERIE ******************/
+.gallery_section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  margin-top: 100px;
+  border-radius: 15px;
+}
 /****************** MODALE ******************/
 
 #contact_modal {

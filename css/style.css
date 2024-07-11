@@ -107,9 +107,11 @@ header a:hover::after {
 /***** Ajout d'un contour visible lors du focus uniquement lorsqu'on utilise les touches du clavier *****/
 header a:focus-visible,
 .photographer_section a:focus-visible {
-  outline: 3px solid #901c1c;
+  outline: 2px solid #901c1c;
   border-radius: 20px;
+  box-shadow: 0 0 5px 5px rgba(144, 28, 28, 0.5);
 }
+
 /**********************************************/
 
 .photographer_section article h2 {
@@ -170,8 +172,13 @@ header a:focus-visible,
 }
 
 .photographer_section article img {
-  height: 200px;
-  width: 200px;
+  height: 220px;
+  width: 220px;
   border-radius: 50%;
   object-fit: cover;
+  transition: transform 0.3s ease; /* Ajoute une transition pour rendre le zoom fluide */
+}
+
+.photographer_section article img:hover {
+  transform: scale(1.2); /* Augmente l'image de 20% lorsqu'on la survole */
 }
