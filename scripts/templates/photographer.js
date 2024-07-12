@@ -2,7 +2,7 @@
 // L'objet retourné par photographerTemplate(data) permet à d'autres parties du code d'accéder aux données du photographe ainsi qu'à la méthode pour créer la vignette, ce qui permet une meilleure modularité et réutilisabilité.
 export function photographerTemplate(data) {
     // Infos diverses photographes = données JSON
-    const { id,name, portrait, city, country, tagline, price } = data;
+    const { id, name, portrait, city, country, tagline, price } = data;
     
     // Chemin vers l'image dans dossier assets selon le nom du photographe en question
     const picture = `assets/photographers/Photographers ID Photos/${portrait}`;

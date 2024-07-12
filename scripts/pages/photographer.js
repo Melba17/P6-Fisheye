@@ -1,39 +1,70 @@
-import { getPhotographers } from './index.js';
-import '../patterns/FactoryGallery.js'; // Importer le script qui gère la galerie avec le Constructor Pattern
+////// GALERIE/MEDIAS //////
 
+import { MediaFactory } from '../patterns/mediaFactory.js';
 
-// Appel à getPhotographers() pour récupérer les données des travaux des photographes
-getPhotographers().then(photographers => {
+// Fonction pour récupérer les médias et les photographes
+async function getData() {
+    try {
+        const response = await fetch("../../data/photographers.json");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Données récupérées :', data);
+        return data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données :', error);
+        return { media: [], photographers: [] }; // Retourne des tableaux vides en cas d'erreur
+    }
+}
+
+// Fonction pour afficher les médias d'un photographe
+async function displayMediasForPhotographer(photographerId) {
+    const data = await getData();
+    const medias = data.media;
+    const photographers = data.photographers;
+    const photographer = photographers.find(p => p.id === photographerId);
+    
+    if (!photographer) {
+        console.error("Photographe non trouvé.");
+        return;
+    }
+    
+    const photographerName = photographer.name;
+
     const gallerySection = document.querySelector('.gallery_section');
 
-    photographers.forEach(photographer => {
-        photographer.media.forEach(mediaData => {
-            try {
-                const media = new MediaFactory(mediaData); // Utilisation de MediaFactory pour créer l'objet média
-                // Création de l'élément média
-                const mediaElement = document.createElement('div');
-                mediaElement.classList.add('media-item');
+    if (!gallerySection) {
+        console.error("La div .gallery_section n'existe pas dans le DOM.");
+        return;
+    }
 
-                // Ajout de l'image ou de la vidéo avec le titre en dessous
-                if (media instanceof Image) {
-                    mediaElement.innerHTML = `
-                        <img src="${media.url}" alt="${media.title}">
-                        <div class="media-title">${media.title}</div>
-                    `;
-                } else if (media instanceof Video) {
-                    mediaElement.innerHTML = `
-                        <video src="${media.url}" controls></video>
-                        <div class="media-title">${media.title}</div>
-                    `;
-                }
+    gallerySection.innerHTML = '';
 
-                // Ajout de l'élément média à la galerie
-                gallerySection.appendChild(mediaElement);
-            } catch (error) {
-                console.error('Erreur lors de la création de l\'objet média :', error);
-            }
-        });
+    const photographerMedias = medias.filter(media => media.photographerId === photographerId);
+
+    photographerMedias.forEach(mediaData => {
+        try {
+            const media = MediaFactory.createMedia(mediaData, photographerName);
+            media.display(); // Appeler la méthode display spécifique au type de média
+        } catch (error) {
+            console.error('Erreur lors de la création et de l\'affichage du média :', error);
+        }
     });
-}).catch(error => {
-    console.error('Erreur lors de la récupération des photographes :', error);
+}
+
+// Fonction pour obtenir le paramètre d'URL
+function getPhotographerIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return parseInt(urlParams.get('id'));
+}
+
+// Appeler la fonction pour afficher les médias du photographe correspondant à l'ID dans l'URL
+document.addEventListener('DOMContentLoaded', () => {
+    const photographerId = getPhotographerIdFromURL();
+    if (photographerId) {
+        displayMediasForPhotographer(photographerId);
+    } else {
+        console.error("Aucun ID de photographe spécifié dans l'URL.");
+    }
 });

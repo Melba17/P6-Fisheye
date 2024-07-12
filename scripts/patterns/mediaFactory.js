@@ -1,0 +1,94 @@
+// Classe de base pour les médias
+class Media {
+    constructor(data, photographerName) {
+        this.title = data.title;
+        this.photographerId = data.photographerId;
+        this.photographerName = photographerName; // Ajouter le nom du photographe
+    }
+
+    display() {
+        console.log('Méthode display non implémentée dans la classe de base Media.');
+    }
+}
+
+// Classe spécifique pour les médias images
+class ImageMedia extends Media {
+    constructor(data, photographerName) {
+        super(data, photographerName);
+        this.image = data.image;
+    }
+
+    display() {
+        const mediaContainer = document.createElement('div');
+        mediaContainer.classList.add('media-container');
+
+        const mediaElement = document.createElement('img');
+        mediaElement.src = `../../assets/photographers/${this.photographerName}/${this.image}`;
+        mediaElement.alt = this.title;
+
+        mediaContainer.appendChild(mediaElement);
+
+        const titleElement = document.createElement('h3');
+        titleElement.textContent = this.title;
+
+        mediaContainer.appendChild(titleElement);
+
+        const gallerySection = document.querySelector('.gallery_section');
+        if (gallerySection) {
+            gallerySection.appendChild(mediaContainer);
+        } else {
+            console.error("La div .gallery_section n'existe pas dans le DOM.");
+        }
+    }
+}
+
+// Classe spécifique pour les médias vidéos
+class VideoMedia extends Media {
+    constructor(data, photographerName) {
+        super(data, photographerName);
+        this.video = data.video;
+    }
+
+    display() {
+        const mediaContainer = document.createElement('div');
+        mediaContainer.classList.add('media-container');
+
+        const mediaElement = document.createElement('video');
+        mediaElement.controls = true;
+        
+
+        const sourceElement = document.createElement('source');
+        sourceElement.src = `../../assets/photographers/${this.photographerName}/${this.video}`;
+        sourceElement.type = 'video/mp4';
+
+        mediaElement.appendChild(sourceElement);
+        mediaContainer.appendChild(mediaElement);
+
+        const titleElement = document.createElement('h3');
+        titleElement.textContent = this.title;
+
+        mediaContainer.appendChild(titleElement);
+
+        const gallerySection = document.querySelector('.gallery_section');
+        if (gallerySection) {
+            gallerySection.appendChild(mediaContainer);
+        } else {
+            console.error("La div .gallery_section n'existe pas dans le DOM.");
+        }
+    }
+}
+
+// Factory pour créer les médias en fonction des données
+class MediaFactory {
+    static createMedia(data, photographerName) {
+        if (data.image) {
+            return new ImageMedia(data, photographerName);
+        } else if (data.video) {
+            return new VideoMedia(data, photographerName);
+        } else {
+            throw new Error('Type de média non supporté.');
+        }
+    }
+}
+
+export { Media, ImageMedia, VideoMedia, MediaFactory };
