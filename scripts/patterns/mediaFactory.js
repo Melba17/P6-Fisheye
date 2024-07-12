@@ -3,7 +3,8 @@ class Media {
     constructor(data, photographerName) {
         this.title = data.title;
         this.photographerId = data.photographerId;
-        this.photographerName = photographerName; // Ajouter le nom du photographe
+        // Utiliser uniquement le prénom
+        this.photographerName = photographerName.split(' ')[0]; 
     }
 
     display() {
@@ -23,7 +24,7 @@ class ImageMedia extends Media {
         mediaContainer.classList.add('media-container');
 
         const mediaElement = document.createElement('img');
-        mediaElement.src = `../../assets/photographers/${this.photographerName}/${this.image}`;
+        mediaElement.src = `assets/photographers/${this.photographerName}/${this.image}`;
         mediaElement.alt = this.title;
 
         mediaContainer.appendChild(mediaElement);
@@ -55,10 +56,9 @@ class VideoMedia extends Media {
 
         const mediaElement = document.createElement('video');
         mediaElement.controls = true;
-        
 
         const sourceElement = document.createElement('source');
-        sourceElement.src = `../../assets/photographers/${this.photographerName}/${this.video}`;
+        sourceElement.src = `assets/photographers/${this.photographerName}/${this.video}`;
         sourceElement.type = 'video/mp4';
 
         mediaElement.appendChild(sourceElement);
