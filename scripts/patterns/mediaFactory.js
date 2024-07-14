@@ -26,6 +26,9 @@ class ImageMedia extends Media {
         const mediaElement = document.createElement('img');
         mediaElement.src = `assets/photographers/${this.photographerName}/${this.image}`;
         mediaElement.alt = this.title;
+        mediaElement.ariaLabel = this.title;
+        // Ajout de cet attribut pour rendre l'image focusable
+        mediaElement.tabIndex = 0;
 
         mediaContainer.appendChild(mediaElement);
 
@@ -55,11 +58,17 @@ class VideoMedia extends Media {
         mediaContainer.classList.add('media-container');
 
         const mediaElement = document.createElement('video');
-        mediaElement.controls = true;
+        // Ajout de cet attribut pour rendre la miniature de la vidéo focusable
+        mediaElement.tabIndex = 0;
+        mediaElement.setAttribute('aria-label', this.title);
+        mediaElement.title = this.title;
 
         const sourceElement = document.createElement('source');
         sourceElement.src = `assets/photographers/${this.photographerName}/${this.video}`;
         sourceElement.type = 'video/mp4';
+        
+
+        
 
         mediaElement.appendChild(sourceElement);
         mediaContainer.appendChild(mediaElement);

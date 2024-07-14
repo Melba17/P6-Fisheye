@@ -17,16 +17,20 @@
 }
 .photograph-info h2 {
   color: #d3573c;
+  font-weight: 400;
   font-size: 60px;
   margin-top: auto;
 }
 .photograph-info h3 {
-  color: #d3573c;
+  color: #901c1c;
+  font-weight: 400;
   font-size: 30px;
   margin-top: -35px;
 }
 .photograph-info strong {
   font-size: 20px;
+  font-weight: 400;
+  color: #525252;
 }
 
 .photograph-image img {
@@ -52,19 +56,55 @@
   margin: auto;
 }
 
-.contact_button:hover,
-.contact_button:focus-visible {
-  background-color: #d3573c;
+.contact_button:hover {
+  background-color: #db8876;
   color: black;
-  outline: 3px solid;
+}
+
+.contact_button:focus-visible {
+  background-color: #db8876;
+  color: black;
+  outline: 3px solid black;
 }
 
 /**************** GALERIE ******************/
+.gallery_section {
+  margin-top: 100px;
+  padding: 30px 100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.gallery_section img:focus-visible,
+.gallery_section video:focus-visible {
+  outline: 3px solid #d3573c;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 5px rgba(144, 28, 28, 0.5);
+}
 .gallery_section img {
-  gap: 10px;
-  border-radius: 15px;
+  width: 350px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
   margin-left: 8%;
 }
+.gallery_section h3 {
+  color: #901c1c;
+  font-weight: 500;
+  font-size: 20px;
+  margin-left: 8%;
+  margin-top: 8px;
+  margin-bottom: 40px;
+}
+.gallery_section video {
+  width: 350px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-left: 8%;
+}
+
+/** ENCART **/
+
 /****************** MODALE ******************/
 
 #contact_modal {
