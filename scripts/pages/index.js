@@ -1,3 +1,6 @@
+///////////////////// PAGE ACCUEIL /////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 // Instruction qui importe la fonction "photographerTemplate" à partir du module/fichier "photographer.js" pour pouvoir l'utiliser ici
 import { photographerTemplate } from "../templates/photographer.js";
 

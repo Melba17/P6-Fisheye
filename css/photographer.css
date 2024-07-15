@@ -70,7 +70,7 @@
 /**************** GALERIE ******************/
 .gallery_section {
   margin-top: 100px;
-  padding: 30px 100px;
+  padding: 30px 62px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
@@ -78,33 +78,55 @@
 .gallery_section video:focus-visible {
   outline: 3px solid #d3573c;
   border-radius: 10px;
-  box-shadow: 0 0 5px 5px rgba(144, 28, 28, 0.5);
+  padding: 2px;
+  box-shadow: 0 0 4px 4px #d3573c;
 }
 .gallery_section img {
   width: 350px;
   height: 350px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-left: 8%;
+  border-radius: 5px;
+  margin-left: 10%;
 }
 .gallery_section h3 {
   color: #901c1c;
   font-weight: 500;
   font-size: 20px;
-  margin-left: 8%;
-  margin-top: 8px;
-  margin-bottom: 40px;
+  margin-left: 10%;
+  margin-top: 5px;
+  margin-bottom: 25px;
 }
 .gallery_section video {
   width: 350px;
   height: 350px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-left: 8%;
+  border-radius: 5px;
+  margin-left: 10%;
 }
 
 /** ENCART **/
+.photograph-insert {
+  width: 300px;
+  height: 70px;
+  display: flex;
+  justify-content: right;
+  padding-right: 15px;
+  align-items: center;
+  background-color: #db8876;
+  color: black;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 5px;
+  position: fixed;
+  right: 50px;
+  bottom: 0;
+  z-index: 1000; /* Assure que l'encart soit au-dessus du contenu lors du scroll */
+}
 
+.photograph-insert:focus-visible {
+  outline: 3px solid black;
+  border-radius: 5px;
+}
 /****************** MODALE ******************/
 
 #contact_modal {

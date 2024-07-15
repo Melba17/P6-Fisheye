@@ -1,3 +1,5 @@
+//////////////////////// FACTORY PATTERN POUR PAGE INDIV PHOTOGRAPHE ////////////////////////////////////////
+
 // Classe de base pour les médias
 class Media {
     constructor(data, photographerName) {
@@ -12,7 +14,7 @@ class Media {
     }
 }
 
-// Classe spécifique pour les médias images
+/// Classe spécifique pour les médias images ///
 class ImageMedia extends Media {
     constructor(data, photographerName) {
         super(data, photographerName);
@@ -24,11 +26,11 @@ class ImageMedia extends Media {
         mediaContainer.classList.add('media-container');
 
         const mediaElement = document.createElement('img');
-        mediaElement.src = `assets/photographers/${this.photographerName}/${this.image}`;
-        mediaElement.alt = this.title;
-        mediaElement.ariaLabel = this.title;
+        mediaElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.image}`);
+        mediaElement.setAttribute('alt', this.title);
+        mediaElement.setAttribute('aria-label', this.title);
         // Ajout de cet attribut pour rendre l'image focusable
-        mediaElement.tabIndex = 0;
+        mediaElement.setAttribute('tabIndex', 0);
 
         mediaContainer.appendChild(mediaElement);
 
@@ -46,7 +48,7 @@ class ImageMedia extends Media {
     }
 }
 
-// Classe spécifique pour les médias vidéos
+/// Classe spécifique pour les médias vidéos ////
 class VideoMedia extends Media {
     constructor(data, photographerName) {
         super(data, photographerName);
@@ -59,14 +61,14 @@ class VideoMedia extends Media {
 
         const mediaElement = document.createElement('video');
         // Ajout de cet attribut pour rendre la miniature de la vidéo focusable
-        mediaElement.tabIndex = 0;
+        mediaElement.setAttribute('tabIndex', 0);
         mediaElement.setAttribute('aria-label', this.title);
-        mediaElement.title = this.title;
+        mediaElement.setAttribute('title', this.title);
+
 
         const sourceElement = document.createElement('source');
-        sourceElement.src = `assets/photographers/${this.photographerName}/${this.video}`;
-        sourceElement.type = 'video/mp4';
-        
+        sourceElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.video}`);
+        sourceElement.setAttribute('type', 'video/mp4');
 
         
 
@@ -87,7 +89,7 @@ class VideoMedia extends Media {
     }
 }
 
-// Factory pour créer les médias en fonction des données
+//// Factory final pour créer les médias en fonction des données ////
 class MediaFactory {
     static createMedia(data, photographerName) {
         if (data.image) {

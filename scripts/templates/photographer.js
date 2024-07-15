@@ -19,7 +19,9 @@ export function photographerTemplate(data) {
         link.setAttribute("href", `photographer.html?id=${id}`);
         // Rendre focusable via la navigation au clavier
         // L'attribut "tabindex" est utilisé pour contrôler l'ordre de tabulation des éléments focusables dans la page web. L'ordre de tabulation est la séquence dans laquelle les éléments reçoivent le focus lorsque l'utilisateur navigue dans la page en utilisant la touche Tab. "0" c'est à dire focusable dans l'ordre naturel du document donc inclus dans l'ordre de tabulation par défaut de la page => améliore l'accessibilité et l'interactivité du site
-        link.setAttribute("tabindex", "0"); 
+        link.setAttribute("tabindex", "0");
+        // Ajouter aria-label pour le lien
+        link.setAttribute("aria-label", `Lien vers la page du photographe ${name}`); 
 
         // Création de l'image
         const img = document.createElement( 'img' );
@@ -42,8 +44,14 @@ export function photographerTemplate(data) {
         location.textContent = `${city}, ${country}`;
         
         // Mise en évidence avec <strong>
+        // Création d'un élément HTML <strong> pour mettre en évidence le texte (ici la tagline du photographe)
         const p = document.createElement( 'strong' );
+        // Définition de l'attribut "id" de l'élément <strong> avec une valeur unique utilisant l'ID du photographe.Cela permet de l'identifier de manière unique dans le document
+        p.id = `photographer-tagline-${id}`;
+        // Ajout du texte de la tagline à l'élément <strong>. Cela affiche la tagline du photographe dans l'élément <strong>
         p.textContent = tagline;
+        // Ajout de l'attribut "aria-labelledby" à l'élément <strong>. L'attribut "aria-labelledby" référence les éléments ayant les ID "photographer-name-{id}" et "photographer-tagline-{id}". Cela indique que l'élément <strong> doit être décrit par le contenu des éléments ayant ces ID, améliorant l'accessibilité
+        p.setAttribute("aria-labelledby", `photographer-tagline-${id}`);
         
         const span = document.createElement( 'span' );
         span.textContent = `${price}€/jour`;
@@ -61,16 +69,20 @@ export function photographerTemplate(data) {
         
     }
 
-    /// FONCTION POUR LA BANNIERE DE PRESENTATION INDIVIDUELLE DU PHOTOGRAPHE ///
+    /// FONCTION POUR LA BANNIERE DE PRESENTATION INDIVIDUELLE PAGE DU PHOTOGRAPHE ///
     function getSpecificElements() {
         const h2 = document.createElement('h2');
+        h2.id = `photographer-name-specific-${id}`;
         h2.textContent = name;
 
         const h3 = document.createElement('h3');
         h3.textContent = `${city}, ${country}`;
 
         const strong = document.createElement('strong');
+        strong.id = `photographer-tagline-specific-${id}`;
         strong.textContent = tagline;
+        // Utilisez aria-labelledby pour les éléments textuels existants
+        strong.setAttribute("aria-labelledby", `photographer-tagline-specific-${id}`);
 
         const img = document.createElement('img');
         img.setAttribute("src", picture);
@@ -89,4 +101,7 @@ export function photographerTemplate(data) {
     console.log(result);
     // La fonction photographerTemplate retourne l'objet "result", ce qui permet à d'autres parties du code d'accéder aux données du photographe ainsi qu'aux méthodes pour créer les vignettes et les éléments spécifiques selon les pages web
     return result;
+
+
+    
 }
