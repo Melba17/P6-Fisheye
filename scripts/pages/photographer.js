@@ -20,10 +20,11 @@ async function getData() {
 // Fonction pour obtenir le paramètre d'URL contenant l'ID du photographe
 function getPhotographerIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return parseInt(urlParams.get('id'));
+    const id = urlParams.get('id');
+    return id ? parseInt(id) : null;
 }
 
-// Fonction principale pour gérer l'affichage des médias et du prix par jour
+// FONCTION PRINCIPALE POUR AFFICHER LE CORPS DE LA PAGE PHOTOGRAPHE
 async function displayPhotographerPage() {
     try {
         const photographerId = getPhotographerIdFromURL();
@@ -56,16 +57,17 @@ async function displayPhotographerPage() {
 
         photographerMedias.forEach(mediaData => {
             try {
+                // INSTANCIATION
                 const media = MediaFactory.createMedia(mediaData, photographerName);
                 media.display();
             } catch (error) {
                 console.error('Erreur lors de la création et de l\'affichage du média :', error);
             }
         });
-
+        // ENCART
         displayDailyPrice(photographer.price);
 
-        // Appeler sortButtonDOM et passer les médias et le nom du photographe
+        // Appelle sortButtonDOM et passe les médias et le nom du photographe
         sortButtonDOM(originalPhotographerMedias, photographerName);
     } catch (error) {
         console.error('Une erreur est survenue :', error);

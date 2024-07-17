@@ -19,6 +19,8 @@ class ImageMedia extends Media {
     constructor(data, photographerName) {
         super(data, photographerName);
         this.image = data.image;
+        this.likes = data.likes ?? 0;
+        this.liked = false;
     }
 
     display() {
@@ -29,63 +31,118 @@ class ImageMedia extends Media {
         mediaElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.image}`);
         mediaElement.setAttribute('alt', this.title);
         mediaElement.setAttribute('aria-label', this.title);
-        // Ajout de cet attribut pour rendre l'image focusable
-        mediaElement.setAttribute('tabIndex', 0);
+        mediaElement.classList.add('media-element');
 
         mediaContainer.appendChild(mediaElement);
 
+        const contentContainer = document.createElement('div');
+        contentContainer.classList.add('content-container');
+
         const titleElement = document.createElement('h3');
         titleElement.textContent = this.title;
+        contentContainer.appendChild(titleElement);
 
-        mediaContainer.appendChild(titleElement);
+        const likesContainer = document.createElement('div');
+        likesContainer.classList.add('likes-container');
+
+        const likesCount = document.createElement('span');
+        likesCount.textContent = this.likes;
+        likesCount.classList.add('likes-count');
+        likesCount.style.color = '#901c1c'; // Couleur principale des likes
+
+        const heartIcon = document.createElement('i');
+        heartIcon.classList.add('fa-solid', 'fa-heart', 'heart-icon');
+        heartIcon.style.color = '#901c1c'; // Couleur principale de l'icône
+
+        heartIcon.addEventListener('click', () => {
+            if (!this.liked) {
+                this.likes++;
+                likesCount.textContent = this.likes;
+                heartIcon.style.color = '#d3573c'; // Couleur lorsqu'icône est cliquée
+                this.liked = true;
+            } else {
+                this.likes--;
+                likesCount.textContent = this.likes;
+                heartIcon.style.color = '#901c1c'; // Couleur principale
+                this.liked = false;
+            }
+        });
+
+        likesContainer.appendChild(likesCount);
+        likesContainer.appendChild(heartIcon);
+        contentContainer.appendChild(likesContainer);
+
+        mediaContainer.appendChild(contentContainer);
 
         const gallerySection = document.querySelector('.gallery_section');
-        if (gallerySection) {
-            gallerySection.appendChild(mediaContainer);
-        } else {
-            console.error("La div .gallery_section n'existe pas dans le DOM.");
-        }
+        gallerySection.appendChild(mediaContainer);
     }
 }
 
-/// Classe spécifique pour les médias vidéos ////
+
+// Classe spécifique pour les médias vidéos
 class VideoMedia extends Media {
     constructor(data, photographerName) {
         super(data, photographerName);
         this.video = data.video;
+        this.likes = data.likes ?? 0;
+        this.liked = false;
     }
 
     display() {
         const mediaContainer = document.createElement('div');
         mediaContainer.classList.add('media-container');
 
-        const mediaElement = document.createElement('video');
-        // Ajout de cet attribut pour rendre la miniature de la vidéo focusable
-        mediaElement.setAttribute('tabIndex', 0);
-        mediaElement.setAttribute('aria-label', this.title);
-        mediaElement.setAttribute('title', this.title);
+        // Ajoutez ici la logique pour afficher la vidéo
+        const videoElement = document.createElement('video');
+        videoElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.video}`);
+        videoElement.setAttribute('alt', this.title);
+        videoElement.setAttribute('aria-label', this.title);
+        videoElement.classList.add('media-element');
 
+        mediaContainer.appendChild(videoElement);
 
-        const sourceElement = document.createElement('source');
-        sourceElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.video}`);
-        sourceElement.setAttribute('type', 'video/mp4');
-
-        
-
-        mediaElement.appendChild(sourceElement);
-        mediaContainer.appendChild(mediaElement);
+        const contentContainer = document.createElement('div');
+        contentContainer.classList.add('content-container');
 
         const titleElement = document.createElement('h3');
         titleElement.textContent = this.title;
+        contentContainer.appendChild(titleElement);
 
-        mediaContainer.appendChild(titleElement);
+        const likesContainer = document.createElement('div');
+        likesContainer.classList.add('likes-container');
+
+        const likesCount = document.createElement('span');
+        likesCount.textContent = this.likes;
+        likesCount.classList.add('likes-count');
+        likesCount.style.color = '#901c1c'; // Couleur principale des likes
+
+        const heartIcon = document.createElement('i');
+        heartIcon.classList.add('fa-solid', 'fa-heart', 'heart-icon');
+        heartIcon.style.color = '#901c1c'; // Couleur principale de l'icône
+
+        heartIcon.addEventListener('click', () => {
+            if (!this.liked) {
+                this.likes++;
+                likesCount.textContent = this.likes;
+                heartIcon.style.color = '#d3573c'; // Couleur lorsqu'icône est cliquée
+                this.liked = true;
+            } else {
+                this.likes--;
+                likesCount.textContent = this.likes;
+                heartIcon.style.color = '#901c1c'; // Couleur principale
+                this.liked = false;
+            }
+        });
+
+        likesContainer.appendChild(likesCount);
+        likesContainer.appendChild(heartIcon);
+        contentContainer.appendChild(likesContainer);
+
+        mediaContainer.appendChild(contentContainer);
 
         const gallerySection = document.querySelector('.gallery_section');
-        if (gallerySection) {
-            gallerySection.appendChild(mediaContainer);
-        } else {
-            console.error("La div .gallery_section n'existe pas dans le DOM.");
-        }
+        gallerySection.appendChild(mediaContainer);
     }
 }
 

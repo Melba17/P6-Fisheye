@@ -53,7 +53,6 @@
   background-color: #901c1c;
   border-radius: 5px;
   cursor: pointer;
-  margin: auto;
 }
 
 .contact_button:hover {
@@ -68,6 +67,7 @@
 }
 
 /****************** Bouton des Filtres ***************************/
+
 .sort_button {
   margin: 50px 100px;
   display: flex;
@@ -89,17 +89,13 @@
   border: none;
   border-radius: 5px;
   padding: 10px;
-  width: 150px; /* Ajustez la largeur selon vos besoins */
-  position: relative; /* Important pour le positionnement absolu des pseudos-éléments */
-}
-
-.photographer_select {
-  padding: 10px;
+  width: 150px;
+  position: relative;
 }
 
 /**************** GALERIE ******************/
 .gallery_section {
-  padding: 30px 62px;
+  padding: 10px 62px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
@@ -120,10 +116,10 @@
 .gallery_section h3 {
   color: #901c1c;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 19px;
   margin-left: 10%;
   margin-top: 5px;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 .gallery_section video {
   width: 350px;
@@ -149,13 +145,45 @@
   position: fixed;
   right: 50px;
   bottom: 0;
-  z-index: 1000; /* Assure que l'encart soit au-dessus du contenu lors du scroll */
+  z-index: 1000; /** Assure que l'encart soit au-dessus du contenu lors du scroll **/
 }
 
 .photographer_insert:focus-visible {
   outline: 3px solid black;
   border-radius: 5px;
 }
+
+/*************** LIKES MEDIAS **********************/
+.content-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.content-container h3 {
+  margin-right: 50px; /* Espacement à droite du titre */
+}
+
+.content-container .likes-count {
+  margin-right: 7px; /* Espacement à droite du compteur de likes */
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.likes-container {
+  margin-bottom: 25px;
+}
+
+.content-container .heart-icon {
+  color: #901c1c; /* Couleur principale de l'icône de cœur */
+  cursor: pointer; /* Curseur de la souris au survol */
+}
+
+/* Optionnel : Style lorsque l'icône de cœur est cliquée */
+.content-container .heart-icon.clicked {
+  color: #d3573c; /* Couleur lorsque l'icône est cliquée */
+}
+
 /****************** MODALE ******************/
 
 #contact_modal {

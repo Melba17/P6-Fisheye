@@ -1,4 +1,4 @@
-////////// SQUELETTE DES VIGNETTES ///////////////
+////////// SQUELETTE DES VIGNETTES PAGE ACCUEIL ///////////////
 // L'objet retourné par photographerTemplate(data) permet à d'autres parties du code d'accéder aux données du photographe ainsi qu'à la méthode pour créer la vignette, ce qui permet une meilleure modularité et réutilisabilité.
 export function photographerTemplate(data) {
     // Infos diverses photographes = données JSON
