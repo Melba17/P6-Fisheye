@@ -100,7 +100,7 @@
 }
 .gallery_section img:focus-visible,
 .gallery_section video:focus-visible {
-  outline: 3px solid #d3573c;
+  outline: 3px solid #901c1c;
   border-radius: 10px;
   padding: 2px;
 }
@@ -176,7 +176,7 @@
 }
 
 .likes-container:focus-visible {
-  outline: 3px solid #d3573c;
+  outline: 3px solid #901c1c;
   border-radius: 5px;
   padding: 2px;
 }
