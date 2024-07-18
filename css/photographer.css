@@ -90,7 +90,6 @@
   border-radius: 5px;
   padding: 10px;
   width: 150px;
-  position: relative;
 }
 
 /**************** GALERIE ******************/
@@ -104,7 +103,6 @@
   outline: 3px solid #d3573c;
   border-radius: 10px;
   padding: 2px;
-  box-shadow: 0 0 4px 4px #d3573c;
 }
 .gallery_section img {
   width: 350px;
@@ -116,10 +114,13 @@
 .gallery_section h3 {
   color: #901c1c;
   font-weight: 500;
-  font-size: 19px;
-  margin-left: 10%;
+  font-size: 20px;
+  margin-left: 12%;
   margin-top: 5px;
   margin-bottom: 30px;
+  text-overflow: ellipsis; /** Si le titre est trop long **/
+  white-space: nowrap;
+  overflow: hidden;
 }
 .gallery_section video {
   width: 350px;
@@ -154,34 +155,34 @@
 }
 
 /*************** LIKES MEDIAS **********************/
-.content-container {
+.content-wrapper {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
-.content-container h3 {
-  margin-right: 50px; /* Espacement à droite du titre */
-}
-
-.content-container .likes-count {
-  margin-right: 7px; /* Espacement à droite du compteur de likes */
-  font-size: 17px;
-  font-weight: 500;
+.content-container {
+  width: 100%;
 }
 
 .likes-container {
-  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  margin-right: 9%;
+  margin-bottom: 21px;
 }
 
-.content-container .heart-icon {
-  color: #901c1c; /* Couleur principale de l'icône de cœur */
-  cursor: pointer; /* Curseur de la souris au survol */
+.likes-container:focus-visible {
+  outline: 3px solid #d3573c;
+  border-radius: 5px;
+  padding: 2px;
 }
 
-/* Optionnel : Style lorsque l'icône de cœur est cliquée */
-.content-container .heart-icon.clicked {
-  color: #d3573c; /* Couleur lorsque l'icône est cliquée */
+.likes-count {
+  font-size: 18px;
 }
 
 /****************** MODALE ******************/

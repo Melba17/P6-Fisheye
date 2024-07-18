@@ -107,10 +107,9 @@ header a:hover::after {
 /***** Ajout d'un contour visible lors du focus uniquement lorsqu'on utilise les touches du clavier *****/
 header a:focus-visible,
 .photographer_section a:focus-visible {
-  outline: 2px solid #901c1c;
+  outline: 3px solid #901c1c;
   padding: 6px;
   border-radius: 10px;
-  box-shadow: 0 0 4px 4px rgba(144, 28, 28, 0.5);
 }
 
 /**********************************************/
