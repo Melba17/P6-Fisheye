@@ -24,7 +24,111 @@ function getPhotographerIdFromURL() {
     return id ? parseInt(id) : null;
 }
 
-// FONCTION PRINCIPALE POUR AFFICHER LE CORPS DE LA PAGE PHOTOGRAPHE
+// Fonction pour gérer le tri des médias
+function sortButtonDOM(originalMedias, photographerName) {
+    const selectContainer = document.querySelector(".sort_button");
+    if (!selectContainer) {
+        console.error("La div .sort_button n'existe pas dans le DOM.");
+        return;
+    }
+
+    // Fonction pour créer les options
+    function createOption(value, text, isSelected = false) {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = text;
+        option.setAttribute("role", "option");
+        if (isSelected) option.setAttribute("selected", "selected");
+        return option;
+    }
+
+    // Nettoyer le contenu existant
+    selectContainer.innerHTML = "";
+
+    // Créer et ajouter le label
+    const label = document.createElement("label");
+    label.setAttribute("for", "filter");
+    label.textContent = "Trier par";
+    selectContainer.appendChild(label);
+
+    // Créer le select
+    const photographerSelect = document.createElement("select");
+    photographerSelect.classList.add("photographer_select");
+    photographerSelect.name = "filter";
+    photographerSelect.id = "filter";
+    photographerSelect.setAttribute("aria-label", "listbox");
+    
+    // Ajouter les options
+    photographerSelect.appendChild(createOption("popularite", "Popularité", true));
+    photographerSelect.appendChild(createOption("date", "Date"));
+    photographerSelect.appendChild(createOption("titre", "Titre"));
+
+    selectContainer.appendChild(photographerSelect);
+
+    // Gestion du tri
+    photographerSelect.addEventListener("change", (event) => {
+        const sortedMedias = [...originalMedias];
+        const value = event.target.value;
+
+        if (value === "popularite") {
+            sortedMedias.sort((a, b) => b.likes - a.likes);
+        } else if (value === "date") {
+            sortedMedias.sort((a, b) => new Date(b.date) - new Date(a.date));
+        } else if (value === "titre") {
+            sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
+        }
+
+        const gallerySection = document.querySelector('.gallery_section');
+        gallerySection.innerHTML = '';
+        sortedMedias.forEach(mediaData => {
+            const media = MediaFactory.createMedia(mediaData, photographerName);
+            media.display();
+        });
+    });
+}
+
+// Fonction pour afficher le prix par jour
+function displayDailyPrice(price, totalLikes) {
+    const insertSection = document.querySelector('.photographer_insert');
+    if (!insertSection) {
+        console.error("La div .photographer_insert n'existe pas dans le DOM.");
+        return;
+    }
+
+    insertSection.innerHTML = '';
+
+    // Créer une nouvelle div pour les likes et l'icône de cœur
+    const likesContainer = document.createElement('div');
+    likesContainer.classList.add('likes_insert_container'); // Ajouter une classe pour le style
+
+    const likesElement = document.createElement('div');
+    likesElement.classList.add('total-likes');
+    likesElement.textContent = `${totalLikes}`;
+    likesElement.id = 'totalLikes'; // Ajout d'un id pour faciliter la mise à jour
+
+    const heartIcon = document.createElement('i');
+    heartIcon.classList.add('fa-solid', 'fa-heart');
+    heartIcon.style.color = 'black'; // Couleur principale de l'icône
+    heartIcon.setAttribute('aria-hidden', 'true');
+
+    // Ajouter les éléments likes et icône dans la nouvelle div
+    likesContainer.appendChild(likesElement);
+    likesContainer.appendChild(heartIcon);
+
+    const priceElement = document.createElement('div');
+    priceElement.classList.add('daily-price');
+    priceElement.textContent = `${price}€ / jour`;
+
+    insertSection.appendChild(likesContainer); // Ajouter la nouvelle div à la section
+    insertSection.appendChild(priceElement);
+
+    // Ajouter l'attribut tabindex
+    insertSection.setAttribute('tabindex', '0');
+    // Ajouter l'attribut aria-label pour décrire la fonction de l'encart
+    insertSection.setAttribute('aria-label', 'Prix par jour du photographe');
+}
+
+// Fonction principale pour afficher le corps de la page photographe
 async function displayPhotographerPage() {
     try {
         const photographerId = getPhotographerIdFromURL();
@@ -55,7 +159,9 @@ async function displayPhotographerPage() {
         const photographerMedias = medias.filter(media => media.photographerId === photographerId);
         const originalPhotographerMedias = [...photographerMedias]; // Copie des médias originaux
 
+        let totalLikes = 0;
         photographerMedias.forEach(mediaData => {
+            totalLikes += mediaData.likes;
             try {
                 // INSTANCIATION
                 const media = MediaFactory.createMedia(mediaData, photographerName);
@@ -64,107 +170,17 @@ async function displayPhotographerPage() {
                 console.error('Erreur lors de la création et de l\'affichage du média :', error);
             }
         });
-        // ENCART
-        displayDailyPrice(photographer.price);
 
         // Appelle sortButtonDOM et passe les médias et le nom du photographe
         sortButtonDOM(originalPhotographerMedias, photographerName);
+        
+        // ENCART
+        displayDailyPrice(photographer.price, totalLikes);
+
     } catch (error) {
         console.error('Une erreur est survenue :', error);
     }
 }
 
-// Fonction pour afficher le prix par jour
-function displayDailyPrice(price) {
-    const insertSection = document.querySelector('.photographer_insert');
-    if (!insertSection) {
-        console.error("La div .photographer_insert n'existe pas dans le DOM.");
-        return;
-    }
-
-    const priceElement = document.createElement('div');
-    priceElement.classList.add('daily-price');
-    priceElement.textContent = `${price}€ / jour`;
-
-    insertSection.appendChild(priceElement);
-
-    // Ajouter l'attribut tabindex
-    insertSection.setAttribute('tabindex', '0');
-    // Ajouter l'attribut aria-label pour décrire la fonction de l'encart
-    insertSection.setAttribute('aria-label', 'Prix par jour du photographe');
-}
-
 // Appeler la fonction principale pour gérer l'affichage de la page du photographe
 document.addEventListener('DOMContentLoaded', displayPhotographerPage);
-
-// Créer le select pour trier les médias
-function sortButtonDOM(originalMedias, photographerName) {
-    const select = document.querySelector(".sort_button");
-    if (!select) {
-        console.error("La div .sort_button n'existe pas dans le DOM.");
-        return;
-    }
-
-    select.innerHTML = "";
-
-    const label = document.createElement("label");
-    label.setAttribute("for", "filter");
-    label.innerHTML = "Trier par";
-    select.appendChild(label);
-
-    const photographerSelect = document.createElement("select");
-    photographerSelect.classList.add("photographer_select");
-    photographerSelect.setAttribute("name", "filter");
-    photographerSelect.setAttribute("id", "filter");
-    // Utilisation de aria-label
-    photographerSelect.setAttribute("aria-label", "listbox"); 
-    // Liaison avec l'élément label
-    select.setAttribute("aria-labelledby", "order by"); 
-
-    const option1 = document.createElement("option");
-    option1.classList.add("select_option");
-    option1.setAttribute("id", "popularite");
-    // Option comme sélectionnée par défaut dans l'élément <select>
-    option1.setAttribute("selected", "selected");
-    option1.value = "popularite";
-    option1.text = "Popularité";
-    option1.setAttribute("role", "option");
-    photographerSelect.appendChild(option1);
-
-    const option2 = document.createElement("option");
-    option2.classList.add("select_option");
-    option2.setAttribute("id", "date");
-    option2.value = "date";
-    option2.text = "Date";
-    option2.setAttribute("role", "option");
-    photographerSelect.appendChild(option2);
-
-    const option3 = document.createElement("option");
-    option3.classList.add("select_option");
-    option3.setAttribute("id", "titre");
-    option3.value = "titre";
-    option3.text = "Titre";
-    option3.setAttribute("role", "option");
-    photographerSelect.appendChild(option3);
-
-    select.appendChild(photographerSelect);
-
-    photographerSelect.addEventListener("change", (event) => {
-        let sortedMedias = [...originalMedias]; // Créer une nouvelle copie à chaque tri 
-
-        if (event.target.value === "popularite") {
-            sortedMedias.sort((a, b) => b.likes - a.likes);
-        } else if (event.target.value === "date") {
-            sortedMedias.sort((a, b) => new Date(b.date) - new Date(a.date));
-        } else if (event.target.value === "titre") {
-            sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
-        }
-
-        const gallerySection = document.querySelector('.gallery_section');
-        gallerySection.innerHTML = '';
-        sortedMedias.forEach(mediaData => {
-            const media = MediaFactory.createMedia(mediaData, photographerName);
-            media.display();
-        });
-    });
-}

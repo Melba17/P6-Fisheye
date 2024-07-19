@@ -60,19 +60,25 @@ class ImageMedia extends Media {
         const heartIcon = document.createElement('i');
         heartIcon.classList.add('fa-solid', 'fa-heart', 'heart-icon');
         heartIcon.style.color = '#901c1c'; // Couleur principale de l'icône
-    
+        heartIcon.setAttribute('aria-hidden', 'true');
+
         const toggleLike = () => {
+            const totalLikesElement = document.getElementById('totalLikes');
+            let totalLikes = parseInt(totalLikesElement.textContent);
+
             if (!this.liked) {
                 this.likes++;
-                likesCount.textContent = this.likes;
+                totalLikes++;
                 heartIcon.style.color = '#d3573c'; // Couleur lorsqu'icône est cliquée
-                this.liked = true;
             } else {
                 this.likes--;
-                likesCount.textContent = this.likes;
+                totalLikes--;
                 heartIcon.style.color = '#901c1c'; // Couleur principale
-                this.liked = false;
             }
+
+            this.liked = !this.liked;
+            likesCount.textContent = this.likes;
+            totalLikesElement.textContent = totalLikes;
         };
     
         likesContainer.addEventListener('click', toggleLike);
@@ -140,19 +146,25 @@ class VideoMedia extends Media {
         const heartIcon = document.createElement('i');
         heartIcon.classList.add('fa-solid', 'fa-heart', 'heart-icon');
         heartIcon.style.color = '#901c1c'; // Couleur principale de l'icône
-    
+        heartIcon.setAttribute('aria-hidden', 'true');
+
         const toggleLike = () => {
+            const totalLikesElement = document.getElementById('totalLikes');
+            let totalLikes = parseInt(totalLikesElement.textContent);
+
             if (!this.liked) {
                 this.likes++;
-                likesCount.textContent = this.likes;
+                totalLikes++;
                 heartIcon.style.color = '#d3573c'; // Couleur lorsqu'icône est cliquée
-                this.liked = true;
             } else {
                 this.likes--;
-                likesCount.textContent = this.likes;
+                totalLikes--;
                 heartIcon.style.color = '#901c1c'; // Couleur principale
-                this.liked = false;
             }
+
+            this.liked = !this.liked;
+            likesCount.textContent = this.likes;
+            totalLikesElement.textContent = totalLikes;
         };
     
         likesContainer.addEventListener('click', toggleLike);
@@ -187,7 +199,7 @@ class MediaFactory {
         } else if (data.video) {
             return new VideoMedia(data, photographerName);
         } else {
-            throw new Error('Type de média non supporté.');
+            throw new Error('Type de média inconnu.');
         }
     }
 }

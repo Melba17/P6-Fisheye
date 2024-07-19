@@ -66,8 +66,7 @@
   outline: 3px solid black;
 }
 
-/****************** Bouton des Filtres ***************************/
-
+/****************** BOUTON DE TRI ***************************/
 .sort_button {
   margin: 50px 100px;
   display: flex;
@@ -132,11 +131,12 @@
 
 /** ENCART **/
 .photographer_insert {
-  width: 300px;
+  width: 220px;
   height: 70px;
   display: flex;
-  justify-content: right;
-  padding-right: 15px;
+  justify-content: space-between;
+  padding-right: 25px;
+  padding-left: 25px;
   align-items: center;
   background-color: #db8876;
   color: black;
@@ -154,6 +154,15 @@
   border-radius: 5px;
 }
 
+/*************** TOTAL LIKES ENCART ********************/
+.likes_insert_container {
+  display: flex;
+  align-items: center;
+}
+
+.total-likes {
+  margin-right: 5px;
+}
 /*************** LIKES MEDIAS **********************/
 .content-wrapper {
   display: flex;
