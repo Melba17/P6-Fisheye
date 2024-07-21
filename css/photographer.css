@@ -68,27 +68,115 @@
 
 /****************** BOUTON DE TRI ***************************/
 .sort_button {
-  margin: 50px 100px;
+  margin: 25px 100px 40px;
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 2rem; /* Assure un espace entre le titre et le menu déroulant */
 }
 
-.sort_button label {
+.sort_button span {
   font-size: 18px;
   font-weight: bold;
-  color: #000000;
+  color: black;
+  margin: 0;
 }
 
-.photographer_select {
+.dropdown {
+  position: relative;
+}
+.dropdown button:focus-visible {
+  outline: 3px solid #db8876;
+}
+
+.dropdown button {
   background-color: #901c1c;
   color: white;
   font-size: 18px;
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding: 10px;
-  width: 150px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 18px;
+  padding-right: 15px; /* Ajout de l'espace pour l'icône */
+  width: 160px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* Style pour l'icône du menu déroulant */
+.dropdown-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: auto; /* Positionner l'icône à droite du texte */
+  transition: transform 0.3s ease; /* Animation pour la rotation */
+  fill: #ffffff; /* Couleur de l'icône */
+}
+
+/* Rotation de l'icône lorsque le menu est ouvert */
+.dropdown[aria-expanded="true"] .dropdown-icon {
+  transform: rotate(180deg); /* Rotation de l'icône vers le bas */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #901c1c;
+  width: 160px;
+  z-index: 1;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  overflow: hidden;
+  margin-top: -5px;
+}
+
+.dropdown-content button {
+  background-color: #901c1c;
+  color: white;
+  font-size: 18px;
+  border: none;
+  padding: 18px;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  position: relative;
+  outline: none; /* Enlève le contour par défaut */
+}
+
+.dropdown-content button + button::before {
+  content: "";
+  display: block;
+  height: 0.7px;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+}
+
+.dropdown-content button:hover {
+  background-color: #db8876;
+  border-radius: 0;
+}
+
+/* Style pour le bouton actif avec tabindex (focus) */
+.dropdown-content button:focus-visible {
+  background-color: #db8876; /* Couleur de surbrillance */
+  border-radius: 0;
+}
+
+.dropdown-content [aria-selected="true"] {
+  background-color: #901c1c;
+}
+
+.dropdown.show .dropdown-content {
+  display: block;
 }
 
 /**************** GALERIE ******************/

@@ -6,6 +6,10 @@ class Media {
         this.title = data.title; // Le titre du média (image ou vidéo)
         this.photographerId = data.photographerId;
         // Utilise uniquement le prénom du photographe
+        // photographerName = paramètre passé au constructeur de la classe Media. Il représente le nom complet du photographe.
+        // this.photographerName = propriété de l'objet créé par la classe Media. Elle sera utilisée dans les sous-classes pour afficher des informations liées au photographe.
+        // La méthode split() divise une chaîne de caractères en un tableau de sous-chaînes, en utilisant le caractère ou la chaîne spécifiée comme délimiteur. Dans ce cas, ' ' (un espace) est utilisé comme délimiteur.
+        // Après la division, [0] sélectionne le premier élément du tableau résultant ce qui permet d'extraire uniquement le prénom du photographe (ou la première partie du nom complet) en supposant que le nom complet est constitué du prénom suivi du nom de famille.
         this.photographerName = photographerName.split(' ')[0]; 
     }
 

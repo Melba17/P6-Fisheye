@@ -26,66 +26,87 @@ function getPhotographerIdFromURL() {
 
 // Fonction pour gérer le tri des médias
 function sortButtonDOM(originalMedias, photographerName) {
-    const selectContainer = document.querySelector(".sort_button");
-    if (!selectContainer) {
-        console.error("La div .sort_button n'existe pas dans le DOM.");
+    const dropdown = document.querySelector(".dropdown");
+    if (!dropdown) {
+        console.error("La div .dropdown n'existe pas dans le DOM.");
         return;
     }
 
-    // Fonction pour créer les options
-    function createOption(value, text, isSelected = false) {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = text;
-        option.setAttribute("role", "option");
-        if (isSelected) option.setAttribute("selected", "selected");
-        return option;
-    }
-
-    // Nettoyer le contenu existant
-    selectContainer.innerHTML = "";
-
-    // Créer et ajouter le label
-    const label = document.createElement("label");
-    label.setAttribute("for", "filter");
-    label.textContent = "Trier par";
-    selectContainer.appendChild(label);
-
-    // Créer le select
-    const photographerSelect = document.createElement("select");
-    photographerSelect.classList.add("photographer_select");
-    photographerSelect.name = "filter";
-    photographerSelect.id = "filter";
-    photographerSelect.setAttribute("aria-label", "listbox");
+    const dropdownButton = document.getElementById("orderByButton");
+    const dropdownContent = dropdown.querySelector(".dropdown-content");
+    const dropdownOptions = dropdownContent.querySelectorAll("button");
+    const icon = document.createElement("i");
     
-    // Ajouter les options
-    photographerSelect.appendChild(createOption("popularite", "Popularité", true));
-    photographerSelect.appendChild(createOption("date", "Date"));
-    photographerSelect.appendChild(createOption("titre", "Titre"));
+    icon.className = "fa-solid fa-angle-up dropdown-icon"; // Icône chevron
+    dropdownButton.appendChild(icon);
 
-    selectContainer.appendChild(photographerSelect);
+    // Initialiser le texte du bouton avec l'option par défaut (Popularité)
+    const defaultOption = dropdownContent.querySelector("button[data-value='popularite']");
+    dropdownButton.firstChild.textContent = defaultOption.textContent;
+    defaultOption.setAttribute("aria-selected", "true");
 
-    // Gestion du tri
-    photographerSelect.addEventListener("change", (event) => {
-        const sortedMedias = [...originalMedias];
-        const value = event.target.value;
+    // Initialiser aria-activedescendant
+    dropdownButton.setAttribute("aria-activedescendant", defaultOption.id);
 
-        if (value === "popularite") {
-            sortedMedias.sort((a, b) => b.likes - a.likes);
-        } else if (value === "date") {
-            sortedMedias.sort((a, b) => new Date(b.date) - new Date(a.date));
-        } else if (value === "titre") {
-            sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
+    dropdownButton.addEventListener("click", () => {
+        const isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+        dropdownButton.setAttribute("aria-expanded", !isExpanded);
+        dropdown.classList.toggle("show");
+
+        // Rotation de l'icône
+        if (isExpanded) {
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            icon.style.transform = 'rotate(180deg)';
         }
+    });
 
-        const gallerySection = document.querySelector('.gallery_section');
-        gallerySection.innerHTML = '';
-        sortedMedias.forEach(mediaData => {
-            const media = MediaFactory.createMedia(mediaData, photographerName);
-            media.display();
+    dropdownOptions.forEach(option => {
+        option.addEventListener("click", (event) => {
+            const value = event.target.getAttribute("data-value");
+            const selectedOption = event.target;
+
+            // Met à jour le texte du bouton avec le texte de l'option sélectionnée
+            dropdownButton.firstChild.textContent = selectedOption.textContent;
+
+            // Marquer l'option sélectionnée et mettre à jour les attributs
+            dropdownOptions.forEach(opt => opt.setAttribute("aria-selected", "false"));
+            selectedOption.setAttribute("aria-selected", "true");
+
+            // Mettre à jour aria-activedescendant
+            dropdownButton.setAttribute("aria-activedescendant", selectedOption.id);
+
+            // Fermer le menu déroulant
+            dropdownButton.setAttribute("aria-expanded", "false");
+            dropdown.classList.remove("show");
+
+            // Réinitialiser l'icône à sa position d'origine
+            icon.style.transform = 'rotate(0deg)';
+
+            // Trier les médias selon l'option sélectionnée
+            const sortedMedias = [...originalMedias];
+            if (value === "popularite") {
+                sortedMedias.sort((a, b) => b.likes - a.likes);
+            } else if (value === "date") {
+                sortedMedias.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (value === "titre") {
+                sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
+            }
+
+            // Réinitialiser la galerie avec les médias triés
+            const gallerySection = document.querySelector('.gallery_section');
+            gallerySection.innerHTML = '';
+            sortedMedias.forEach(mediaData => {
+                const media = MediaFactory.createMedia(mediaData, photographerName);
+                media.display();
+            });
         });
     });
+
+    // Par défaut, initialiser le tri par popularité
+    dropdownOptions[0].click();
 }
+
 
 // Fonction pour afficher le prix par jour
 function displayDailyPrice(price, totalLikes) {
