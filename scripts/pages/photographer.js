@@ -1,5 +1,8 @@
+
 // Import de la Factory pour les médias
 import { MediaFactory } from '../patterns/mediaFactory.js';
+import { Lightbox } from '../utils/lightbox.js';
+
 
 // Fonction pour récupérer les données des photographes et des médias
 async function getData() {
@@ -93,13 +96,14 @@ function sortButtonDOM(originalMedias, photographerName) {
                 sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
             }
 
-            // Réinitialiser la galerie avec les médias triés
+            // Réinitialise la galerie avec les médias triés
             const gallerySection = document.querySelector('.gallery_section');
             gallerySection.innerHTML = '';
             sortedMedias.forEach(mediaData => {
                 const media = MediaFactory.createMedia(mediaData, photographerName);
                 media.display();
             });
+            
         });
     });
 
@@ -149,6 +153,7 @@ function displayDailyPrice(price, totalLikes) {
     insertSection.setAttribute('aria-label', 'Prix par jour du photographe');
 }
 
+
 // Fonction principale pour afficher le corps de la page photographe
 async function displayPhotographerPage() {
     try {
@@ -197,6 +202,11 @@ async function displayPhotographerPage() {
         
         // ENCART
         displayDailyPrice(photographer.price, totalLikes);
+
+        // Initialisation de la lightbox
+        const photographerInsert = document.querySelector('.photographer_insert');
+        const lightbox = new Lightbox(photographerInsert);
+        lightbox.init();
 
     } catch (error) {
         console.error('Une erreur est survenue :', error);

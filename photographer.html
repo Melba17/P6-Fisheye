@@ -89,7 +89,7 @@
         </div>
       </div>
       <!-- Galerie Photographe -->
-      <div class="gallery_section"></div>
+      <div class="gallery_section media_container"></div>
       <!-- Encart en bas de page -->
       <div class="photographer_insert"></div>
     </main>
@@ -104,10 +104,17 @@
             alt="bouton de fermeture"
           />
         </header>
-        <form>
+        <form method="get" action="">
           <div>
             <label for="prenom">Prénom</label>
             <input id="prenom" />
+            <label for="nom">Nom</label>
+            <input id="nom" />
+            <label for="email">Email</label>
+            <input id="email" />
+            <label for="message">Votre message</label>
+            <textarea name="message" id="message"></textarea>
+            <button type="submit" value="envoyer">Envoyer</button>
           </div>
           <button class="contact_button" type="submit">Envoyer</button>
         </form>

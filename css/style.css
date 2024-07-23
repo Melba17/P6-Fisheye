@@ -108,7 +108,7 @@ header a:hover::after {
 header a:focus-visible,
 .photographer_section a:focus-visible {
   outline: 3px solid #901c1c;
-  padding: 6px;
+  outline-offset: 8px;
   border-radius: 10px;
 }
 

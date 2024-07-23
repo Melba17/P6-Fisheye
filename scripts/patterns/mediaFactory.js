@@ -1,3 +1,4 @@
+
 //////////////////////// FACTORY PATTERN POUR PAGE INDIV PHOTOGRAPHE ////////////////////////////////////////
 
 // Classe de base pour les médias
@@ -38,6 +39,9 @@ class ImageMedia extends Media {
         mediaElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.image}`);
         mediaElement.setAttribute('alt', this.title);  // Texte alternatif pour l'image
         mediaElement.setAttribute('aria-label', this.title); // Label ARIA pour l'accessibilité
+        mediaElement.setAttribute('data-src', `assets/photographers/${this.photographerName}/${this.image}`);
+        mediaElement.setAttribute('data-type', 'image');
+        mediaElement.setAttribute('data-title', this.title);
         mediaElement.setAttribute('tabindex', '0'); // Ajoute tabindex pour rendre l'image focusable
         
         // Ajout de l'image au conteneur
@@ -141,6 +145,9 @@ class VideoMedia extends Media {
         videoElement.setAttribute('src', `assets/photographers/${this.photographerName}/${this.video}`);
         videoElement.setAttribute('alt', this.title); // Texte alternatif pour la vidéo
         videoElement.setAttribute('aria-label', this.title); // Label ARIA pour l'accessibilité
+        videoElement.setAttribute('data-src', `assets/photographers/${this.photographerName}/${this.video}`);
+        videoElement.setAttribute('data-type', 'video');
+        videoElement.setAttribute('data-title', this.title);
         videoElement.setAttribute('tabindex', '0'); // Ajout de tabindex
         
         // Ajout de la vidéo au conteneur
