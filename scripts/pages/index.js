@@ -3,6 +3,10 @@
 
 // Instruction qui importe la fonction "photographerTemplate" à partir du module/fichier "photographer.js" pour pouvoir l'utiliser ici
 import { photographerTemplate } from "../templates/photographer.js";
+import { createModal, openModal, closeModal } from "../utils/contactForm.js";
+
+// Rendre closeModal globalement accessible
+window.closeModal = closeModal;
 
 // RECUPERATION DES DONNEES JSON 
 // opération asynchrone avec "async" et "await" pour traiter la réponse du serveur: c'est à dire permet au navigateur d'afficher normalement les infos à l'écran en attendant la réponse du serveur
@@ -60,11 +64,31 @@ async function displayPhotographerDetails(photographerId) {
         const imageSection = document.querySelector(".photograph-image");
         // Ajout de l'image du photographe à la section de l'image
         imageSection.appendChild(img);
+
+        createModal();
+
+        const nameElement = document.querySelector(".photographer-name");
+        nameElement.textContent = photographer.name; 
+
+        document.querySelector(".contact_button").addEventListener("click", openModal);
+        document.querySelector(".modal_close").addEventListener("click", closeModal);
+        document.querySelector("form").addEventListener("submit", function(event) {
+            if (validateForm()) {
+                // Form can be submitted or any other action
+                console.log("Le formulaire est envoyé.");
+                closeModal();
+            } else {
+                event.preventDefault();
+            }
+        });
+
     } else {
         // Affichage d'une erreur dans la console si le photographe n'a pas été trouvé
         console.error('Photographe non trouvé');
     }
 }
+
+
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 

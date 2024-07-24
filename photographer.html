@@ -31,9 +31,8 @@
     <main id="main" role="main">
       <div class="photograph-header">
         <div class="photograph-info"></div>
-        <button type="button" class="contact_button" onclick="displayModal()">
-          Contactez-moi
-        </button>
+        <!-- MODALE -->
+        <button type="button" class="contact_button">Contactez-moi</button>
         <div class="photograph-image"></div>
       </div>
       <!-- Bouton de tri -->
@@ -93,33 +92,6 @@
       <!-- Encart en bas de page -->
       <div class="photographer_insert"></div>
     </main>
-    <!-- MODALE -->
-    <div id="contact_modal" role="dialog">
-      <div class="modal">
-        <header>
-          <h2>Contactez-moi</h2>
-          <img
-            src="assets/icons/close.svg"
-            onclick="closeModal()"
-            alt="bouton de fermeture"
-          />
-        </header>
-        <form method="get" action="">
-          <div>
-            <label for="prenom">Prénom</label>
-            <input id="prenom" />
-            <label for="nom">Nom</label>
-            <input id="nom" />
-            <label for="email">Email</label>
-            <input id="email" />
-            <label for="message">Votre message</label>
-            <textarea name="message" id="message"></textarea>
-            <button type="submit" value="envoyer">Envoyer</button>
-          </div>
-          <button class="contact_button" type="submit">Envoyer</button>
-        </form>
-      </div>
-    </div>
     <!-- FICHIERS JS -->
     <script type="module" src="scripts/pages/index.js"></script>
     <script type="module" src="/scripts/pages/photographer.js"></script>
