@@ -5,7 +5,6 @@ export function createModal() {
     modalContainer.className = "bckg_modal";
     modalContainer.setAttribute('aria-labelledby', "Contactez-moi");
     modalContainer.style.display = "none"; // Modale cachée au départ
-    
 
     modalContainer.innerHTML = `
         <div class="modal">
@@ -44,12 +43,15 @@ export function createModal() {
 
     document.body.appendChild(modalContainer);
 
-    // Ajout des gestionnaires d'événements pour la validation
+    // Ajout des gestionnaires d'événements pour la validation et le logging
     const fields = ['first', 'last', 'email', 'message'];
     fields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
-            field.addEventListener('blur', () => validateField(fieldId));
+            field.addEventListener('blur', () => {
+                validateField(fieldId);
+                logFieldValue(fieldId);
+            });
         }
     });
     
@@ -64,7 +66,6 @@ export function createModal() {
 export function openModal() {
     toggleModal(true);
 }
-
 
 export function closeModal() {
     toggleModal(false);
@@ -82,6 +83,12 @@ function validateField(fieldId) {
     const field = document.getElementById(fieldId);
     if (!field) return false;
 
+    // Utiliser trim() pour les champs 'first' et 'last'
+    let value = field.value;
+    if (fieldId === 'first' || fieldId === 'last') {
+        value = value.trim();
+    }
+
     const validators = {
         'first': value => /^[a-zA-Z]{2,}$/.test(value),
         'last': value => /^[a-zA-Z]{2,}$/.test(value),
@@ -96,7 +103,7 @@ function validateField(fieldId) {
         'message': "!! Le champ du message ne doit pas être vide !!"
     };
 
-    const condition = validators[fieldId](field.value);
+    const condition = validators[fieldId](value);
     const errorMessage = errorMessages[fieldId];
     const errorSpan = field.nextElementSibling;
 
@@ -115,6 +122,21 @@ function validateField(fieldId) {
     }
 
     return condition;
+}
+
+function logFieldValue(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+
+    let value = field.value;
+    if (fieldId === 'first' || fieldId === 'last') {
+        value = value.trim();
+    }
+
+    // Affiche les valeurs des champs 'first', 'last' et 'email' dans la console lorsque l'utilisateur a fini de remplir le champ
+    if (fieldId === 'first' || fieldId === 'last' || fieldId === 'email') {
+        console.log(`${fieldId}: ${value}`);
+    }
 }
 
 export function validateForm() {
