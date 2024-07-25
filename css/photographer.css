@@ -401,8 +401,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 85px 20px 30px 20px;
-  margin: 25px 30%;
+  padding: 55px 5px 150px 5px;
+  margin: 2% 30% 2%;
   animation: modalopen 0.4s ease-in-out;
   position: relative;
 }
@@ -417,56 +417,51 @@
   }
 }
 
-.modal-header-content {
-  position: relative; /* Position relative pour les éléments superposés */
-  width: 100%;
-}
-
 .modal header h2,
 .photographer-name {
-  position: absolute;
   white-space: nowrap;
-  margin-left: -230px;
+  letter-spacing: -1px;
+  margin-left: -80px;
+  margin-top: -55px;
 }
 
 .modal header h2 {
   font-size: 55px;
   font-weight: normal;
-  margin-top: -95px;
 }
 
 .photographer-name {
   font-size: 55px;
   font-weight: normal;
-  margin-top: -25px;
 }
 
 .modal_close {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   background: url(../assets/icons/close_modal.svg) center center / 100% 100%
     no-repeat transparent;
   border: none;
   z-index: 3;
   cursor: pointer;
   right: 25px;
-  top: 35px;
+  top: 37px;
 }
 
 form {
   display: flex;
-  width: 90%;
+  width: 85%;
   flex-direction: column;
   align-items: flex-start;
   margin-left: -15px;
-  margin-top: 60px;
+  margin-top: 20px;
+  gap: 20px;
 }
 
 form label {
   color: #312e2e;
   font-size: 24px;
-  margin-bottom: -15px;
+  margin-bottom: 3px;
 }
 
 form div {
@@ -479,7 +474,7 @@ form input {
   width: 100%;
   height: 60px;
   border: none;
-  border-radius: 3px;
+  border-radius: 3px !important;
 }
 
 .text-control {
@@ -492,24 +487,24 @@ form input {
 }
 
 form textarea {
-  height: 90px;
-  padding: 5px;
-  width: 101%;
-  border-radius: 8px;
+  height: 90px !important;
+  padding: 8px !important;
+  width: 100% !important;
+  border: none !important;
+  border-radius: 3px !important;
 }
 
 .submit_button {
   font-size: 20px;
   font-weight: bold;
   color: white;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-top: 0;
   padding: 8px;
   width: 170px;
   height: 70px;
   border: none;
   background-color: #901c1c;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
 }
 
@@ -521,24 +516,6 @@ form textarea {
   overflow: hidden;
 }
 
-/** Pour les messages d'erreur à afficher **/
-.formData[data-error]::after {
-  content: attr(data-error);
-  color: #901c1c;
-  display: block;
-  font-size: 14px;
-  margin-top: 5px;
-  text-align: left;
-  opacity: 0;
-}
-
-.formData[data-error-visible="true"]::after {
-  opacity: 1;
-}
-.formData[data-error-visible="true"].text-control {
-  border: 3px solid #fe142f;
-}
-
 /* Enleve le style de focus automatique */
 .text-control:focus,
 .submit_button:focus {
@@ -548,4 +525,29 @@ form textarea {
 /* Ajoute un style personnalisé de focus */
 .text-control:focus {
   outline: 3px solid #901c1c;
+}
+
+/* Styles pour masquer les messages d'erreur par défaut */
+input[data-error-visible="true"],
+textarea[data-error-visible="true"] {
+  border: 3px solid #f20101 !important; /* Bordure rouge pour indiquer une erreur */
+}
+
+/* Réserve de l'espace pour les messages d'erreur */
+form div {
+  position: relative;
+}
+
+span.error-message {
+  display: block;
+  color: #f20101; /* Couleur rouge pour le message d'erreur */
+  font-weight: 600;
+  font-size: 0.875em; /* Taille de police du message d'erreur */
+  margin-top: 0.25em; /* Espacement au-dessus du message d'erreur */
+  height: 1em; /* Réserve un espace fixe pour le message d'erreur */
+  visibility: hidden; /* Cache le message d'erreur */
+}
+
+span.error-message[data-error-visible="true"] {
+  visibility: visible; /* Affiche le message d'erreur */
 }

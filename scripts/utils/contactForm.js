@@ -5,6 +5,7 @@ export function createModal() {
     modalContainer.className = "bckg_modal";
     modalContainer.setAttribute('aria-labelledby', "Contactez-moi");
     modalContainer.style.display = "none"; // Modale cachée au départ
+    
 
     modalContainer.innerHTML = `
         <div class="modal">
@@ -16,21 +17,25 @@ export function createModal() {
                 <span class="modal_close" aria-label="bouton de fermeture"></span>
             </header>
             <form name="contactForm" action="" method="get" novalidate>
-                <div class="formData">
-                    <label id="First" for="first">Prénom</label><br />
-                    <input class="text-control" type="text" id="first" name="first" aria-labelledby="First" /><br />
+                <div>
+                    <label for="first">Prénom</label>
+                    <input class="text-control" type="text" id="first" name="first" aria-labelledby="first" />
+                    <span class="error-message"></span>
                 </div>
-                <div class="formData">
-                    <label id="Last" for="last">Nom</label><br />
-                    <input class="text-control" type="text" id="last" name="last" aria-labelledby="Last" /><br />
+                <div>
+                    <label for="last">Nom</label>
+                    <input class="text-control" type="text" id="last" name="last" aria-labelledby="last" />
+                    <span class="error-message"></span>
                 </div>
-                <div class="formData">
-                    <label id="Email" for="email">E-mail</label><br />
-                    <input class="text-control" type="email" id="email" name="email" aria-labelledby="Email" /><br />
+                <div>
+                    <label for="email">E-mail</label>
+                    <input class="text-control" type="email" id="email" name="email" aria-labelledby="email" />
+                    <span class="error-message"></span>
                 </div>
-                <div class="formData">
-                    <label id="Message" for="message">Votre message</label><br />
-                    <textarea name="message" id="message" rows="10" class="text-control" aria-labelledby="Message"></textarea><br />
+                <div>
+                    <label for="message">Votre message</label>
+                    <textarea name="message" id="message" class="text-control" aria-labelledby="message"></textarea>
+                    <span class="error-message"></span>
                 </div>
                 <button class="submit_button" type="submit" aria-label="envoyer">Envoyer</button>
             </form>
@@ -40,80 +45,78 @@ export function createModal() {
     document.body.appendChild(modalContainer);
 
     // Ajout des gestionnaires d'événements pour la validation
-    document.getElementById("first").addEventListener("blur", validateFirstName);
-    document.getElementById("last").addEventListener("blur", validateLastName);
-    document.getElementById("email").addEventListener("blur", validateEmail);
-    document.getElementById("message").addEventListener("blur", validateMessage);
-
+    const fields = ['first', 'last', 'email', 'message'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('blur', () => validateField(fieldId));
+        }
+    });
+    
+    // Gestionnaire pour la validation du formulaire
     document.querySelector("form").addEventListener("submit", function(event) {
         if (!validateForm()) {
-            event.preventDefault(); // Empêche la soumission du formulaire si les validations échouent
+            event.preventDefault(); // Empêche le navigateur de gérer la soumission si les validations échouent
         }
     });
 }
 
-
-
 export function openModal() {
-    const modal = document.getElementById("contact_modal");
-    if (modal) {
-        modal.style.display = "block";
-        document.body.classList.add('no-scroll');
-    }
+    toggleModal(true);
 }
+
 
 export function closeModal() {
+    toggleModal(false);
+}
+
+function toggleModal(show) {
     const modal = document.getElementById("contact_modal");
     if (modal) {
-        modal.style.display = "none";
-        document.body.classList.remove('no-scroll');
+        modal.style.display = show ? "block" : "none";
+        document.body.classList.toggle('no-scroll', show);
     }
 }
 
-function validateField(field, condition, errorMessage) {
+function validateField(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return false;
+
+    const validators = {
+        'first': value => /^[a-zA-Z]{2,}$/.test(value),
+        'last': value => /^[a-zA-Z]{2,}$/.test(value),
+        'email': value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/.test(value),
+        'message': value => value.trim() !== ""
+    };
+
+    const errorMessages = {
+        'first': "!! Le champ doit contenir au moins 2 lettres / Les chiffres ne sont pas autorisés !!",
+        'last': "!! Le champ doit contenir au moins 2 lettres / Les chiffres ne sont pas autorisés !!",
+        'email': "!! L'adresse email n'est pas valide !!",
+        'message': "!! Le champ du message ne doit pas être vide !!"
+    };
+
+    const condition = validators[fieldId](field.value);
+    const errorMessage = errorMessages[fieldId];
+    const errorSpan = field.nextElementSibling;
+
     if (!condition) {
-        field.setAttribute('data-error', errorMessage);
         field.setAttribute('data-error-visible', 'true');
-        return false;
+        if (errorSpan) {
+            errorSpan.textContent = errorMessage;
+            errorSpan.setAttribute('data-error-visible', 'true');
+        }
     } else {
-        field.removeAttribute('data-error');
         field.removeAttribute('data-error-visible');
-        return true;
+        if (errorSpan) {
+            errorSpan.textContent = '';
+            errorSpan.setAttribute('data-error-visible', 'false');
+        }
     }
+
+    return condition;
 }
 
-function validateFirstName() {
-    const firstNameField = document.getElementById("first");
-    const regex = /^[a-zA-Z]+$/;
-    const condition = firstNameField.value.length >= 2 && regex.test(firstNameField.value);
-    return validateField(firstNameField, condition, "!! Le champ doit contenir au moins 2 lettres / Les chiffres ne sont pas autorisés !!");
-}
-
-function validateLastName() {
-    const lastNameField = document.getElementById("last");
-    const regex = /^[a-zA-Z]+$/;
-    const condition = lastNameField.value.length >= 2 && regex.test(lastNameField.value);
-    return validateField(lastNameField, condition, "!! Le champ doit contenir au moins 2 lettres / Les chiffres ne sont pas autorisés !!");
-}
-
-function validateEmail() {
-    const emailField = document.getElementById("email");
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9._-]+/;
-    const condition = regex.test(emailField.value);
-    return validateField(emailField, condition, "!! L'adresse email n'est pas valide !!");
-}
-
-function validateMessage() {
-    const messageField = document.getElementById("message");
-    const condition = messageField.value.trim() !== "";
-    return validateField(messageField, condition, "!! Le champ du message ne doit pas être vide !!");
-}
-
-function validateForm() {
-    const isValidFirstName = validateFirstName();
-    const isValidLastName = validateLastName();
-    const isValidEmail = validateEmail();
-    const isValidMessage = validateMessage();
-
-    return isValidFirstName && isValidLastName && isValidEmail && isValidMessage;
+export function validateForm() {
+    return ['first', 'last', 'email', 'message'].every(validateField);
 }
