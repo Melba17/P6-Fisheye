@@ -420,17 +420,17 @@
 .photographer-name {
   white-space: nowrap;
   letter-spacing: -1px;
-  margin-left: -80px;
+  margin-left: -65px;
   margin-top: -55px;
 }
 
 .modal header h2 {
-  font-size: 55px;
+  font-size: 50px;
   font-weight: normal;
 }
 
 .photographer-name {
-  font-size: 55px;
+  font-size: 50px;
   font-weight: normal;
 }
 
@@ -445,6 +445,12 @@
   cursor: pointer;
   right: 25px;
   top: 37px;
+}
+
+/* Style de focus pour .modal_close */
+.modal_close:focus-visible {
+  outline: 3px solid #901c1c; /* Couleur de l'indicateur de focus */
+  outline-offset: 2px; /* Décalage de la bordure */
 }
 
 form {
@@ -511,13 +517,20 @@ form textarea {
   background: black;
 }
 
+.submit_button:focus-visible {
+  /* Styles lorsque le bouton est au focus */
+  background-color: black;
+  color: white;
+  outline-offset: 2px;
+  outline: 3px solid black;
+}
+
 .no-scroll {
   overflow: hidden;
 }
 
 /* Enleve le style de focus automatique */
-.text-control:focus,
-.submit_button:focus {
+.text-control:focus {
   outline: none;
 }
 
