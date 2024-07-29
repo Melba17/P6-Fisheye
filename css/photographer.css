@@ -365,8 +365,8 @@
 .lightbox_close:focus-visible,
 .lightbox_prev:focus-visible,
 .lightbox_next:focus-visible {
-  outline: 3px solid #d3573c; /* Couleur d'accentuation du focus */
-  outline-offset: 2px; /* Décalage de l'outline pour qu'il ne chevauche pas le bouton */
+  outline: 3px solid #901c1c;
+  outline-offset: 2px;
 }
 
 /* Empêche le défilement du body */
@@ -542,6 +542,7 @@ form textarea {
 input[data-error-visible="true"],
 textarea[data-error-visible="true"] {
   border: 3px solid #f20101 !important; /* Bordure rouge pour indiquer une erreur */
+  outline: none !important; /* Enleve le outline rouge personnalisé */
 }
 
 /* Réserve de l'espace pour les messages d'erreur */
