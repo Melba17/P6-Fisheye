@@ -1,8 +1,6 @@
-
 // Import de la Factory pour les médias
 import { MediaFactory } from '../patterns/mediaFactory.js';
 import { Lightbox } from '../utils/lightbox.js';
-
 
 // Fonction pour récupérer les données des photographes et des médias
 async function getData() {
@@ -27,90 +25,131 @@ function getPhotographerIdFromURL() {
     return id ? parseInt(id) : null;
 }
 
-// Fonction pour gérer le tri des médias
-function sortButtonDOM(originalMedias, photographerName) {
-    const dropdown = document.querySelector(".dropdown");
-    if (!dropdown) {
-        console.error("La div .dropdown n'existe pas dans le DOM.");
+// Fonction pour créer et insérer dynamiquement le bouton de tri
+function createSortButton(medias, photographerName) {
+    const sortButtonDiv = document.querySelector('.sort_button');
+    if (!sortButtonDiv) {
+        console.error("La div .sort_button n'existe pas dans le DOM.");
         return;
     }
 
-    const dropdownButton = document.getElementById("orderByButton");
-    const dropdownContent = dropdown.querySelector(".dropdown-content");
-    const dropdownOptions = dropdownContent.querySelectorAll("button");
-    const icon = document.createElement("i");
-    
-    icon.className = "fa-solid fa-angle-up dropdown-icon"; // Icône chevron
+    // Créer le texte "Trier par"
+    const textSpan = document.createElement('span');
+    textSpan.textContent = 'Trier par';
+    sortButtonDiv.appendChild(textSpan);
+
+    // Créer le conteneur pour le menu déroulant
+    const dropdown = document.createElement('div');
+    dropdown.className = 'dropdown';
+
+    // Créer le bouton du menu déroulant
+    const dropdownButton = document.createElement('button');
+    dropdownButton.type = 'button';
+    dropdownButton.id = 'orderByButton';
+    dropdownButton.setAttribute('aria-haspopup', 'listbox');
+    dropdownButton.setAttribute('aria-expanded', 'false');
+    dropdownButton.setAttribute('aria-label', 'Menu de tri');
+
+    // Ajouter le texte au bouton
+    const buttonTextSpan = document.createElement('span');
+    buttonTextSpan.textContent = 'Popularité';
+    dropdownButton.appendChild(buttonTextSpan);
+
+    // Ajouter l'icône de la flèche
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid fa-angle-down dropdown-icon';
     dropdownButton.appendChild(icon);
 
-    // Initialiser le texte du bouton avec l'option par défaut (Popularité)
-    const defaultOption = dropdownContent.querySelector("button[data-value='popularite']");
-    dropdownButton.firstChild.textContent = defaultOption.textContent;
-    defaultOption.setAttribute("aria-selected", "true");
+    // Ajouter le bouton au conteneur dropdown
+    dropdown.appendChild(dropdownButton);
 
-    // Initialiser aria-activedescendant
-    dropdownButton.setAttribute("aria-activedescendant", defaultOption.id);
+    // Créer le contenu du menu déroulant
+    const dropdownContent = document.createElement('div');
+    dropdownContent.className = 'dropdown-content';
+    dropdownContent.setAttribute('role', 'listbox');
+    dropdownContent.setAttribute('aria-labelledby', 'orderByButton');
+
+    // Ajouter le contenu au conteneur dropdown
+    dropdown.appendChild(dropdownContent);
+
+    // Ajouter le conteneur dropdown au conteneur principal
+    sortButtonDiv.appendChild(dropdown);
+
+    // Appeler sortButtonDOM avec les données réelles
+    sortButtonDOM(medias, photographerName);
+}
+
+// Ajoutez ou modifiez la fonction sortButtonDOM
+function sortButtonDOM(originalMedias, photographerName) {
+    const dropdown = document.querySelector(".dropdown");
+    const dropdownButton = document.getElementById("orderByButton");
+    const dropdownContent = dropdown.querySelector(".dropdown-content");
+    const icon = dropdownButton.querySelector(".dropdown-icon");
+
+    const options = [
+        { id: 'populariteOption', value: 'popularite', text: 'Popularité' },
+        { id: 'dateOption', value: 'date', text: 'Date' },
+        { id: 'titreOption', value: 'titre', text: 'Titre' }
+    ];
+
+    function rearrangeOptions(selectedValue) {
+        const selectedOption = options.find(option => option.value === selectedValue);
+        dropdownButton.querySelector('span').textContent = selectedOption.text;
+        dropdownButton.setAttribute("aria-label", `Menu de tri, option actuelle : ${selectedOption.text}`);
+
+        dropdownContent.innerHTML = '';
+
+        options.forEach(option => {
+            if (option.value !== selectedValue) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.role = "option";
+                button.id = option.id;
+                button.setAttribute("aria-selected", "false");
+                button.setAttribute("data-value", option.value);
+                button.setAttribute("aria-label", `Tri par ${option.text.toLowerCase()}`);
+                button.className = "dropdown-item";
+                button.textContent = option.text;
+                dropdownContent.appendChild(button);
+
+                button.addEventListener("click", () => {
+                    rearrangeOptions(option.value);
+
+                    const sortedMedias = [...originalMedias];
+                    if (option.value === "popularite") {
+                        sortedMedias.sort((a, b) => b.likes - a.likes);
+                    } else if (option.value === "date") {
+                        sortedMedias.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    } else if (option.value === "titre") {
+                        sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
+                    }
+
+                    const gallerySection = document.querySelector('.gallery_section');
+                    gallerySection.innerHTML = '';
+                    sortedMedias.forEach(mediaData => {
+                        const media = MediaFactory.createMedia(mediaData, photographerName);
+                        media.display();
+                    });
+
+                    
+                });
+            }
+        });
+
+        dropdownButton.setAttribute("aria-expanded", "false");
+        dropdown.classList.remove("show");
+        icon.style.transform = 'rotate(0deg)';
+    }
 
     dropdownButton.addEventListener("click", () => {
         const isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
         dropdownButton.setAttribute("aria-expanded", !isExpanded);
         dropdown.classList.toggle("show");
-
-        // Rotation de l'icône
-        if (isExpanded) {
-            icon.style.transform = 'rotate(0deg)';
-        } else {
-            icon.style.transform = 'rotate(180deg)';
-        }
+        icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
     });
 
-    dropdownOptions.forEach(option => {
-        option.addEventListener("click", (event) => {
-            const value = event.target.getAttribute("data-value");
-            const selectedOption = event.target;
-
-            // Met à jour le texte du bouton avec le texte de l'option sélectionnée
-            dropdownButton.firstChild.textContent = selectedOption.textContent;
-
-            // Marquer l'option sélectionnée et mettre à jour les attributs
-            dropdownOptions.forEach(opt => opt.setAttribute("aria-selected", "false"));
-            selectedOption.setAttribute("aria-selected", "true");
-
-            // Mettre à jour aria-activedescendant
-            dropdownButton.setAttribute("aria-activedescendant", selectedOption.id);
-
-            // Fermer le menu déroulant
-            dropdownButton.setAttribute("aria-expanded", "false");
-            dropdown.classList.remove("show");
-
-            // Réinitialiser l'icône à sa position d'origine
-            icon.style.transform = 'rotate(0deg)';
-
-            // Trier les médias selon l'option sélectionnée
-            const sortedMedias = [...originalMedias];
-            if (value === "popularite") {
-                sortedMedias.sort((a, b) => b.likes - a.likes);
-            } else if (value === "date") {
-                sortedMedias.sort((a, b) => new Date(b.date) - new Date(a.date));
-            } else if (value === "titre") {
-                sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
-            }
-
-            // Réinitialise la galerie avec les médias triés
-            const gallerySection = document.querySelector('.gallery_section');
-            gallerySection.innerHTML = '';
-            sortedMedias.forEach(mediaData => {
-                const media = MediaFactory.createMedia(mediaData, photographerName);
-                media.display();
-            });
-            
-        });
-    });
-
-    // Par défaut, initialiser le tri par popularité
-    dropdownOptions[0].click();
+    rearrangeOptions('popularite');
 }
-
 
 // Fonction pour afficher le prix par jour
 function displayDailyPrice(price, totalLikes) {
@@ -153,16 +192,17 @@ function displayDailyPrice(price, totalLikes) {
     insertSection.setAttribute('aria-label', 'Prix par jour du photographe');
 }
 
-
 // Fonction principale pour afficher le corps de la page photographe
 async function displayPhotographerPage() {
     try {
+        // Obtenir l'ID du photographe depuis l'URL
         const photographerId = getPhotographerIdFromURL();
         if (!photographerId) {
             console.error("Aucun ID de photographe spécifié dans l'URL.");
             return;
         }
 
+        // Récupérer les données
         const data = await getData();
         const medias = data.media;
         const photographers = data.photographers;
@@ -175,6 +215,7 @@ async function displayPhotographerPage() {
         
         const photographerName = photographer.name;
 
+        // Sélectionner la section de la galerie
         const gallerySection = document.querySelector('.gallery_section');
         if (!gallerySection) {
             console.error("La div .gallery_section n'existe pas dans le DOM.");
@@ -182,6 +223,7 @@ async function displayPhotographerPage() {
         }
         gallerySection.innerHTML = '';
 
+        // Filtrer les médias du photographe et calculer le nombre total de likes
         const photographerMedias = medias.filter(media => media.photographerId === photographerId);
         const originalPhotographerMedias = [...photographerMedias]; // Copie des médias originaux
 
@@ -197,14 +239,18 @@ async function displayPhotographerPage() {
             }
         });
 
-        // Appelle sortButtonDOM et passe les médias et le nom du photographe
-        sortButtonDOM(originalPhotographerMedias, photographerName);
+        // Appeler createSortButton pour insérer le contenu de tri
+        createSortButton(originalPhotographerMedias, photographerName);
         
         // ENCART
         displayDailyPrice(photographer.price, totalLikes);
 
         // Initialisation de la lightbox
         const photographerInsert = document.querySelector('.photographer_insert');
+        if (!photographerInsert) {
+            console.error("La div .photographer_insert n'existe pas dans le DOM.");
+            return;
+        }
         const lightbox = new Lightbox(photographerInsert);
         lightbox.init();
 

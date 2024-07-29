@@ -72,31 +72,31 @@
   margin: 25px 100px 40px;
   display: flex;
   align-items: center;
-  gap: 2rem; /* Assure un espace entre le titre et le menu déroulant */
+  gap: 2rem;
 }
 
 .sort_button span {
   font-size: 18px;
   font-weight: bold;
   color: black;
-  margin: 0;
 }
 
 .dropdown {
   position: relative;
 }
 
+.dropdown button span {
+  color: white; /** couleur blanche pour le texte du bouton **/
+}
+
 .dropdown button {
   background-color: #901c1c;
-  color: white;
+  color: white; /** couleur blanche pour l'icône flèche **/
   font-size: 18px;
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 18px;
-  padding-right: 15px; /* Ajout de l'espace pour l'icône */
+  padding: 15px 18px 15px 15px;
   width: 160px;
   cursor: pointer;
   display: flex;
@@ -109,19 +109,15 @@
   outline-offset: 2px;
 }
 
-/* Style pour l'icône du menu déroulant */
 .dropdown-icon {
   width: 16px;
   height: 16px;
-  display: inline-block;
-  margin-left: auto; /* Positionner l'icône à droite du texte */
-  transition: transform 0.3s ease; /* Animation pour la rotation */
-  fill: #ffffff; /* Couleur de l'icône */
+  margin-left: auto;
+  transition: transform 0.3s ease;
 }
 
-/* Rotation de l'icône lorsque le menu est ouvert */
 .dropdown[aria-expanded="true"] .dropdown-icon {
-  transform: rotate(180deg); /* Rotation de l'icône vers le bas */
+  transform: rotate(180deg);
 }
 
 .dropdown-content {
@@ -130,17 +126,14 @@
   background-color: #901c1c;
   width: 160px;
   z-index: 1;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 5px;
   overflow: hidden;
   margin-top: -5px;
 }
 
 .dropdown-content button {
   background-color: #901c1c;
-  color: white;
+  color: white; /** couleur blanche pour le texte des options **/
   font-size: 18px;
   border: none;
   padding: 18px;
@@ -149,33 +142,23 @@
   cursor: pointer;
   font-family: "DM Sans", sans-serif;
   position: relative;
-  outline: none; /* Enlève le contour par défaut */
 }
 
-.dropdown-content button + button::before {
+/** Lignes blanches **/
+.dropdown-content button::before {
   content: "";
   display: block;
   height: 0.7px;
   background-color: white;
   position: absolute;
-  top: 0;
+  top: -0.3px;
   left: 10px;
   right: 10px;
 }
 
-.dropdown-content button:hover {
-  background-color: #d3573c;
-  border-radius: 0;
-}
-
-/* Style pour le bouton actif avec tabindex (focus) */
+.dropdown-content button:hover,
 .dropdown-content button:focus-visible {
-  background-color: #d3573c; /* Couleur de surbrillance */
-  border-radius: 0;
-}
-
-.dropdown-content [aria-selected="true"] {
-  background-color: #901c1c;
+  background-color: #d3573c;
 }
 
 .dropdown.show .dropdown-content {
@@ -220,7 +203,7 @@
   margin-left: 10%;
 }
 
-/** ENCART **/
+/************** ENCART ***********************/
 .photographer_insert {
   width: 220px;
   height: 70px;
