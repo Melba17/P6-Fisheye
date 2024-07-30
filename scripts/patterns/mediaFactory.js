@@ -14,7 +14,7 @@ class Media {
         this.photographerName = photographerName.split(' ')[0]; 
     }
 
-    // Méthode de base pour afficher le média (doit être implémentée dans les sous-classes)
+    // Méthode de base pour afficher le média (implémentée dans les sous-classes)
     display() {
         console.log('Méthode display non implémentée dans la classe de base Media.');
     }

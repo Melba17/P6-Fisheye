@@ -125,7 +125,7 @@ export class Lightbox {
             this.photographerInsert.classList.add('hidden'); // Cache l'élément du photographe
         }
 
-        // Met le focus sur la flèche de gauche
+        // Met le focus sur la flèche de gauche à l'ouverture de la lightbox
         document.querySelector('.lightbox_prev').focus();
 
         // Trap focus dans la lightbox
@@ -154,9 +154,11 @@ export class Lightbox {
     init() {
         document.querySelectorAll('.media_container img, .media_container video').forEach((media, index) => {
             media.dataset.index = index; // Définit l'index des médias dans les attributs de données
+            media.setAttribute('tabindex', '0'); // Rendre le média focusable
             media.addEventListener('click', () => this.openLightbox(index)); // Ouvre la lightbox lors d'un clic sur un média
             media.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter' || event.key === ' ') { // Si la touche "Enter" ou "Espace" est enfoncée
+                    event.preventDefault(); // Empêche l'action par défaut
                     this.openLightbox(index); // Ouvre la lightbox pour le média cliqué
                 }
             }); // @param {KeyboardEvent} event - L'événement clavier

@@ -10,7 +10,7 @@ import { createModal, openModal, closeModal, validateForm } from "../utils/conta
 async function getPhotographers() {
     try {
         // Requête "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données du fichier
-        const response = await fetch("../../data/photographers.json");
+        const response = await fetch("./data/photographers.json");
         
         // Vérifie que la réponse est correcte sinon on signale un problème
         if (!response.ok) {

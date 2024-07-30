@@ -5,7 +5,7 @@ import { Lightbox } from '../utils/lightbox.js';
 // Fonction pour récupérer les données des photographes et des médias
 async function getData() {
     try {
-        const response = await fetch("../../data/photographers.json");
+        const response = await fetch("./data/photographers.json");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -79,7 +79,19 @@ function createSortButton(medias, photographerName) {
     sortButtonDOM(medias, photographerName);
 }
 
-// Ajoutez ou modifiez la fonction sortButtonDOM
+function initializeLightbox() {
+    // Supprimer l'ancienne lightbox s'il en existe une
+    const existingLightbox = document.querySelector('.lightbox');
+    if (existingLightbox) {
+        existingLightbox.remove();
+    }
+
+    // Créer et initialiser une nouvelle instance de lightbox
+    const lightbox = new Lightbox();
+    lightbox.init();
+}
+
+// Ajoute le bouton de tri
 function sortButtonDOM(originalMedias, photographerName) {
     const dropdown = document.querySelector(".dropdown");
     const dropdownButton = document.getElementById("orderByButton");
@@ -91,7 +103,7 @@ function sortButtonDOM(originalMedias, photographerName) {
         { id: 'dateOption', value: 'date', text: 'Date' },
         { id: 'titreOption', value: 'titre', text: 'Titre' }
     ];
-
+    // Modifie le bouton de tri
     function rearrangeOptions(selectedValue) {
         const selectedOption = options.find(option => option.value === selectedValue);
         dropdownButton.querySelector('span').textContent = selectedOption.text;
@@ -115,6 +127,7 @@ function sortButtonDOM(originalMedias, photographerName) {
                 button.addEventListener("click", () => {
                     rearrangeOptions(option.value);
 
+                    // Tri des médias
                     const sortedMedias = [...originalMedias];
                     if (option.value === "popularite") {
                         sortedMedias.sort((a, b) => b.likes - a.likes);
@@ -124,14 +137,22 @@ function sortButtonDOM(originalMedias, photographerName) {
                         sortedMedias.sort((a, b) => a.title.localeCompare(b.title));
                     }
 
+                    // Réinitialiser la galerie avec les médias triés
                     const gallerySection = document.querySelector('.gallery_section');
                     gallerySection.innerHTML = '';
                     sortedMedias.forEach(mediaData => {
-                        const media = MediaFactory.createMedia(mediaData, photographerName);
-                        media.display();
+                        try {
+                            const media = MediaFactory.createMedia(mediaData, photographerName);
+                            media.display();
+                            
+                        } catch (error) {
+                            console.error('Erreur lors de la création et de l\'affichage du média :', error);
+                        }
                     });
 
-                    
+                    // Réinitialiser la lightbox
+                    initializeLightbox();
+
                 });
             }
         });
@@ -231,7 +252,7 @@ async function displayPhotographerPage() {
         photographerMedias.forEach(mediaData => {
             totalLikes += mediaData.likes;
             try {
-                // INSTANCIATION
+                
                 const media = MediaFactory.createMedia(mediaData, photographerName);
                 media.display();
             } catch (error) {
@@ -239,20 +260,15 @@ async function displayPhotographerPage() {
             }
         });
 
-        // Appeler createSortButton pour insérer le contenu de tri
+        // Appelle createSortButton pour insérer le contenu de tri
         createSortButton(originalPhotographerMedias, photographerName);
         
         // ENCART
         displayDailyPrice(photographer.price, totalLikes);
 
-        // Initialisation de la lightbox
-        const photographerInsert = document.querySelector('.photographer_insert');
-        if (!photographerInsert) {
-            console.error("La div .photographer_insert n'existe pas dans le DOM.");
-            return;
-        }
-        const lightbox = new Lightbox(photographerInsert);
-        lightbox.init();
+        // Réinitialise la lightbox
+        initializeLightbox();
+        
 
     } catch (error) {
         console.error('Une erreur est survenue :', error);
