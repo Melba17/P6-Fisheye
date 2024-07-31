@@ -104,8 +104,10 @@ header a:hover::after {
   outline: none; /* Supprime le contour par défaut pour les liens */
 }
 
-/***** Ajout d'un contour visible lors du focus uniquement lorsqu'on utilise les touches du clavier *****/
+/***** Ajout d'un contour visible lors du focus *****/
+/** Logo **/
 header a:focus-visible,
+/** Vignettes **/
 .photographer_section a:focus-visible {
   outline: 3px solid #901c1c;
   outline-offset: 8px;

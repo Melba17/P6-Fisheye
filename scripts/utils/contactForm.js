@@ -1,3 +1,4 @@
+////////////////////// FORMULAIRE DE CONTACT/MODALE ////////////////////////////////////
 export function createModal() {
     // Crée un conteneur pour la modale
     const modalContainer = document.createElement('div');
@@ -183,18 +184,18 @@ function handleArrowKeyNavigation(event) {
 }
 
 /**
- * Gère la navigation avec la touche Tab dans la modale
+ * Gère la navigation avec la touche Tab dans la modale pour maintenir le focus à l'intérieur
  * @param {KeyboardEvent} e - L'événement de clavier qui déclenche la gestion de la touche Tab
  */
 function trapFocus(element) {
     // Sélectionne tous les éléments focusables dans la modale
     const focusableElements = element.querySelectorAll(
-        'button, input, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, input, textarea'
     );
     const firstFocusableElement = focusableElements[0];
     const lastFocusableElement = focusableElements[focusableElements.length - 1];
 
-    // Ajoute un gestionnaire d'événements pour capturer la touche Tab
+    // Ajoute un gestionnaire d'événements pour capturer la touche Tab. Le "9" est un code de touche (ou keyCode) correspondant à la touche Tabulation (Tab) du clavier
     element.addEventListener('keydown', (e) => {
         const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
 
@@ -235,9 +236,10 @@ function validateField(fieldId) {
 
     // Définit les fonctions de validation pour chaque champ
     const validators = {
+        // {2,} => le groupe de caractères précédent doit apparaître au moins 2 fois et le fait de ne pas spécifier une valeur maximale après la virgule signifie qu'il n'y a pas de limite supérieure sur le nombre d'occurrences
         'first': value => /^[a-zA-Z]{2,}$/.test(value),
         'last': value => /^[a-zA-Z]{2,}$/.test(value),
-        'email': value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/.test(value),
+        'email': value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9._-]+$/.test(value),
         'message': value => value.trim() !== ""
     };
 

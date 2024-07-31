@@ -1,107 +1,118 @@
 ////////// SQUELETTE DES VIGNETTES PAGE ACCUEIL ///////////////
-// L'objet retourné par photographerTemplate(data) permet à d'autres parties du code d'accéder aux données du photographe ainsi qu'à la méthode pour créer la vignette, ce qui permet une meilleure modularité et réutilisabilité.
+// La fonction photographerTemplate(data) retourne un objet contenant les informations du photographe ainsi que des méthodes pour créer des éléments DOM.
+// Cela permet de créer des vignettes pour chaque photographe sur la page d'accueil et de générer des éléments spécifiques pour la page du photographe de manière modulaire.
+
 export function photographerTemplate(data) {
-    // Infos diverses photographes = données JSON
+    // Extraction des propriétés nécessaires du photographe à partir des données JSON
     const { id, name, portrait, city, country, tagline, price } = data;
     
-    // Chemin vers l'image dans dossier assets selon le nom du photographe en question
+    // Définition du chemin vers l'image du photographe dans le dossier assets
     const picture = `assets/photographers/Photographers ID Photos/${portrait}`;
 
-    /// FONCTION POUR LA PAGE D'ACCUEIL ///
+    /// FONCTION POUR CRÉER LA VIGNETTE DE L'ACCUEIL ///
     function getUserCardDOM() {
-        // Création de la balise <article> pour L'emplacement de la vignette...
-        const article = document.createElement( 'article' );
+        // Création de la balise <article> pour contenir la vignette du photographe
+        const article = document.createElement('article');
 
-
-        // Création du lien avec la balises <a> qui entoure et encapsule l'img et le h2
+        // Création du lien <a> qui entoure l'image et le titre du photographe
         const link = document.createElement('a');
-        // Lien vers la page de chaque photographe selon leur Id respectif / ?id=${id} étant le paramètre voulu dans l'url
+        // Définition du lien vers la page du photographe en utilisant son ID
         link.setAttribute("href", `photographer.html?id=${id}`);
-        // Rendre focusable via la navigation au clavier
-        // L'attribut "tabindex" est utilisé pour contrôler l'ordre de tabulation des éléments focusables dans la page web. L'ordre de tabulation est la séquence dans laquelle les éléments reçoivent le focus lorsque l'utilisateur navigue dans la page en utilisant la touche Tab. "0" c'est à dire focusable dans l'ordre naturel du document donc inclus dans l'ordre de tabulation par défaut de la page => améliore l'accessibilité et l'interactivité du site
+        // Rendre le lien focusable pour les utilisateurs utilisant la navigation au clavier
         link.setAttribute("tabindex", "0");
-        // Ajouter aria-label pour le lien
-        link.setAttribute("aria-label", `Lien vers la page du photographe ${name}`); 
+        // Ajouter un label ARIA pour améliorer l'accessibilité en décrivant le lien
+        link.setAttribute("aria-label", `Lien vers la page du photographe ${name}`);
 
-        // Création de l'image
-        const img = document.createElement( 'img' );
-        // .. ajout à l'img d'un attribut src contenant le nom de l'image
-        img.setAttribute("src", picture)
-        // l'attribut alt de l'image est défini avec le nom du photographe pour améliorer l'accessibilité
-        img.setAttribute("alt", name); 
-        // Création du titre h2
-        const h2 = document.createElement( 'h2' );
-        // .. qui prend le nom du photographe en valeur
+        // Création de l'image du photographe
+        const img = document.createElement('img');
+        // Définition de l'attribut src de l'image avec le chemin de l'image du photographe
+        img.setAttribute("src", picture);
+        // Définition de l'attribut alt de l'image avec le nom du photographe pour l'accessibilité
+        img.setAttribute("alt", name);
+
+        // Création du titre du photographe
+        const h2 = document.createElement('h2');
+        // Définition du texte du titre avec le nom du photographe
         h2.textContent = name;
 
-        // Ajout de l'image et du titre h2 dans le lien/balise <a>
+        // Ajout de l'image et du titre dans le lien <a>
         link.appendChild(img);
         link.appendChild(h2);
 
-        ///// Ajout des autres éléments /////
-        const location = document.createElement( 'h3' );
-        // Interpolation
+        ///// AJOUT DES AUTRES INFORMATIONS DU PHOTOGRAPHE /////
+        // Création de l'élément <h3> pour afficher la localisation
+        const location = document.createElement('h3');
+        // Définition du texte de la localisation avec la ville et le pays
         location.textContent = `${city}, ${country}`;
         
-        // Mise en évidence avec <strong>
-        // Création d'un élément HTML <strong> pour mettre en évidence le texte (ici la tagline du photographe)
-        const p = document.createElement( 'strong' );
-        // Définition de l'attribut "id" de l'élément <strong> avec une valeur unique utilisant l'ID du photographe.Cela permet de l'identifier de manière unique dans le document
+        // Création de l'élément <strong> pour afficher la tagline du photographe
+        const p = document.createElement('strong');
+        // Définition d'un ID unique pour l'élément <strong> en utilisant l'ID du photographe
         p.id = `photographer-tagline-${id}`;
-        // Ajout du texte de la tagline à l'élément <strong>. Cela affiche la tagline du photographe dans l'élément <strong>
+        // Définition du texte de la tagline
         p.textContent = tagline;
-        // Ajout de l'attribut "aria-labelledby" à l'élément <strong>. L'attribut "aria-labelledby" référence les éléments ayant les ID "photographer-name-{id}" et "photographer-tagline-{id}". Cela indique que l'élément <strong> doit être décrit par le contenu des éléments ayant ces ID, améliorant l'accessibilité
+        // Ajouter un label ARIA pour l'élément <strong> pour améliorer l'accessibilité
         p.setAttribute("aria-labelledby", `photographer-tagline-${id}`);
         
-        const span = document.createElement( 'span' );
+        // Création de l'élément <span> pour afficher le prix par jour
+        const span = document.createElement('span');
+        // Définition du texte du prix
         span.textContent = `${price}€/jour`;
 
-        // Ajout de l'ensemble des infos à la balise <article> 
+        // Ajout de tous les éléments créés à la balise <article>
         article.appendChild(link);
         article.appendChild(location);
         article.appendChild(p);
         article.appendChild(span);
 
-        // Affiche l'article dans la console
+        // Affichage de l'article dans la console (utilisé pour le débogage)
         console.log(article); 
-        // Retourne l'élément DOM <article> (ensemble du contenu de la vignette ), qui peut être directement utilisé pour afficher le contenu sur la page web.
-        return (article);
-        
+        // Retourne l'élément DOM <article> qui représente la vignette complète du photographe
+        return article;
     }
 
-    /// FONCTION POUR LA BANNIERE DE PRESENTATION INDIVIDUELLE PAGE DU PHOTOGRAPHE ///
+    /////// FONCTION POUR LA BANNIÈRE DE PRÉSENTATION SUR LA PAGE DU PHOTOGRAPHE ////////
     function getSpecificElements() {
+        // Création de l'élément <h2> pour le nom du photographe sur la page spécifique
         const h2 = document.createElement('h2');
+        // Définition d'un ID unique pour l'élément <h2> en utilisant l'ID du photographe
         h2.id = `photographer-name-specific-${id}`;
+        // Définition du texte du titre avec le nom du photographe
         h2.textContent = name;
 
+        // Création de l'élément <h3> pour afficher la localisation sur la page spécifique
         const h3 = document.createElement('h3');
+        // Définition du texte de la localisation avec la ville et le pays
         h3.textContent = `${city}, ${country}`;
 
+        // Création de l'élément <strong> pour afficher la tagline sur la page spécifique
         const strong = document.createElement('strong');
+        // Définition d'un ID unique pour l'élément <strong> en utilisant l'ID du photographe
         strong.id = `photographer-tagline-specific-${id}`;
+        // Définition du texte de la tagline
         strong.textContent = tagline;
-        // Utilisez aria-labelledby pour les éléments textuels existants
+        // Ajouter un label ARIA pour l'élément <strong> pour améliorer l'accessibilité
         strong.setAttribute("aria-labelledby", `photographer-tagline-specific-${id}`);
 
+        // Création de l'image du photographe
         const img = document.createElement('img');
+        // Définition de l'attribut src de l'image avec le chemin de l'image du photographe
         img.setAttribute("src", picture);
+        // Définition de l'attribut alt de l'image avec le nom du photographe pour l'accessibilité
         img.setAttribute("alt", name);
 
-        // Création d'un objet spécifique..
+        // Création d'un objet contenant tous les éléments spécifiques à la page du photographe
         const elements = { h2, h3, strong, img };
-        // .. qui est affiché dans la console (peut servir en cas de déboggage) pour voir sa structure
+        // Affichage de l'objet dans la console (utilisé pour le débogage)
         console.log(elements);
-        // la fonction "getSpecificElements" retourne l'objet elements, ce qui permet à d'autres parties du code d'accéder aux balises HTML encapsulées dans cet objet
+        // Retourne l'objet contenant les éléments spécifiques à la page du photographe
         return elements;
     }
-    // Création d'un objet "result" à partir des données initiales et des fonctions précédemment créées
+
+    // Création d'un objet résultat contenant les informations du photographe et les méthodes de création des éléments DOM
     const result = { name, picture, getUserCardDOM, getSpecificElements };
-    // Affichage dans la console
+    // Affichage de l'objet résultat dans la console (utilisé pour le débogage)
     console.log(result);
-    // La fonction photographerTemplate retourne l'objet "result", ce qui permet à d'autres parties du code d'accéder aux données du photographe ainsi qu'aux méthodes pour créer les vignettes et les éléments spécifiques selon les pages web
+    // Retourne l'objet résultat pour permettre l'accès aux informations et méthodes depuis d'autres parties du code
     return result;
-
-
-    
 }
