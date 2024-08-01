@@ -16,7 +16,7 @@ async function getData() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Convertit la réponse en format JSON et la retourne
+        // Désérialisation des données JSON pour pouvoir être affichées par le navigateur/DOM
         return await response.json();
     } catch (error) {
         // Affiche une erreur en cas de problème avec la requête ou la conversion

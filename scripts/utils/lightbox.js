@@ -1,11 +1,12 @@
 ////////////////////////////// LIGHTBOX /////////////////////////////////////////////////
-
-// Classe représentant une lightbox pour afficher des médias en plein écran
+// Classe représentant une lightbox pour afficher des médias en plein écran = Modèle/Plan pour créer un objet Lightbox 
 export class Lightbox {
-    //Initialise la lightbox, les éléments média, et les écouteurs d'événements.
-    constructor() {
+    // "Constructor" = Initialisation des propriétés de l'objet Lightbox et crée les éléments nécessaires à l'affichage de la lightbox.
+    // "This", dans le constructeur, se réfère à l'objet en cours de création permettant d'initialiser ses propres propriétés et de définir ses propres méthodes.
+    // Ces propriétés et méthodes permettent à chaque instance de Lightbox de maintenir son propre état et de manipuler son propre DOM sans interférer avec d'autres instances si on appelle la classe Lightbox plusieurs fois.
+    constructor() { 
         this.currentIndex = 0; // Index du média actuellement affiché
-        this.mediaElements = []; // Liste des éléments médias à afficher dans la lightbox
+        this.mediaElements = []; // stockage de la liste des éléments médias à afficher dans la lightbox
         this.photographerInsert = document.querySelector('.photographer_insert'); // Élément à masquer lors de l'ouverture de la lightbox
 
         // Création dynamique de la lightbox
@@ -13,15 +14,15 @@ export class Lightbox {
         this.lightbox.className = 'lightbox'; // Assigne la classe CSS pour la lightbox
         this.lightbox.id = 'lightbox'; // Assigne l'ID pour la lightbox
         this.lightbox.style.display = 'none'; // Cache la lightbox par défaut
-        this.lightbox.setAttribute('role', 'dialog'); // Définit le rôle ARIA pour la lightbox (dialogue modale)
+        this.lightbox.setAttribute('role', 'dialog'); // Définit le rôle ARIA pour la lightbox 
         this.lightbox.setAttribute('aria-label', 'Média en plein écran'); // Définit l'étiquette ARIA pour la lightbox
         this.lightbox.innerHTML = `
             <button class="lightbox_close" aria-label="Fermer la fenêtre" tabindex="0"></button>
             <button class="lightbox_prev" aria-label="Média précédent" tabindex="0"></button>
             <div class="lightbox_container">
                 <div class="lightbox_content">
-                    <img id="lightbox_img" alt="" aria-label="">
-                    <video id="lightbox_video" controls aria-label=""></video>
+                    <img id="lightbox_img">
+                    <video id="lightbox_video" controls></video>
                     <p class="lightbox_title" id="lightbox_title"></p>
                 </div>
             </div>
@@ -36,11 +37,14 @@ export class Lightbox {
         this.addEventListeners(); // Ajoute les écouteurs d'événements
     }
 
+
+    /////////// Méthodes de l'objet Lightbox qui définissent les actions que celle-ci peut réaliser /////////////
     // Ajoute les écouteurs d'événements pour les boutons et les événements clavier
     addEventListeners() {
+        const closeButton = document.querySelector('.lightbox_close'); // Référence au bouton de fermeture
         const prevButton = document.querySelector('.lightbox_prev'); // Référence au bouton précédent
         const nextButton = document.querySelector('.lightbox_next'); // Référence au bouton suivant
-        const closeButton = document.querySelector('.lightbox_close'); // Référence au bouton de fermeture
+        
 
         // Écouteurs pour les boutons de la lightbox
         closeButton.addEventListener('click', () => this.closeLightbox()); // Écouteur pour fermer la lightbox
@@ -75,7 +79,7 @@ export class Lightbox {
         });
     }
 
-    //Ferme la lightbox et restaure le défilement du corps du document. 
+    // Ferme la lightbox et restaure le défilement du corps du document. 
     closeLightbox() {
         this.lightbox.style.display = 'none'; // Cache la lightbox
         this.lightboxImage.style.display = 'none'; // Cache l'image dans la lightbox
@@ -88,7 +92,7 @@ export class Lightbox {
 
     /**
      * Ouvre la lightbox avec le média à l'index spécifié.
-     * @param {number} index - L'index du média à afficher.
+     * @param {number} index - L'index du média à afficher / indique que la méthode openLightbox attend un paramètre nommé index de type number
      */
     openLightbox(index) {
         const media = this.mediaElements[index]; // Récupère le média à l'index spécifié
@@ -96,9 +100,9 @@ export class Lightbox {
 
         this.currentIndex = index; // Met à jour l'index actuel
 
-        const src = media.getAttribute('data-src'); // Récupère la source du média
-        const type = media.getAttribute('data-type'); // Récupère le type de média (image ou vidéo)
-        const title = media.getAttribute('data-title'); // Récupère le titre du média
+        const src = media.getAttribute('data-src'); // Récupère la source du média (prédéfinit dans le factory pattern)
+        const type = media.getAttribute('data-type'); // Récupère le type de média (image ou vidéo) (prédéfinit dans le factory pattern)
+        const title = media.getAttribute('data-title'); // Récupère le titre du média (prédéfinit dans le factory pattern)
 
         // Affiche le média approprié dans la lightbox
         if (type === 'image') {
@@ -120,9 +124,6 @@ export class Lightbox {
         if (this.photographerInsert) {
             this.photographerInsert.classList.add('hidden'); // Cache l'élément du photographe
         }
-
-        // Met le focus sur le bouton de navigation précédent à l'ouverture de la lightbox
-        document.querySelector('.lightbox_prev').focus();
 
         // Trap focus dans la lightbox
         this.trapFocus(this.lightbox);
@@ -164,7 +165,7 @@ export class Lightbox {
      */
     trapFocus(element) {
         const focusableElements = element.querySelectorAll(
-            '.lightbox_prev, .lightbox_next, .lightbox_close, #lightbox_img, #lightbox_video'
+            '.lightbox_close, .lightbox_prev, .lightbox_next'
         ); // Sélectionne tous les éléments focusables dans la lightbox
         const firstFocusableElement = focusableElements[0]; // Premier élément focusable
         const lastFocusableElement = focusableElements[focusableElements.length - 1]; // Dernier élément focusable
@@ -198,27 +199,55 @@ export class Lightbox {
      * @param {KeyboardEvent} event - L'événement clavier
      */
     handleKeyDown(event) {
-        if (this.lightbox.style.display === 'block') { // Si la lightbox est affichée
-            if (event.key === 'Escape') { // Si la touche "Échap" est enfoncée
-                this.closeLightbox(); // Ferme la lightbox
-            } else if (event.key === 'ArrowRight') { // Si la touche flèche droite est enfoncée
-                event.preventDefault(); // Empêche l'action par défaut
-                this.showNext(); // Affiche le média suivant
-                document.querySelector('.lightbox_next').focus(); // Garde le focus sur le bouton suivant
-            } else if (event.key === 'ArrowLeft') { // Si la touche flèche gauche est enfoncée
-                event.preventDefault(); // Empêche l'action par défaut
-                this.showPrev(); // Affiche le média précédent
-                document.querySelector('.lightbox_prev').focus(); // Garde le focus sur le bouton précédent
-            } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { // Si la touche flèche bas ou haut est enfoncée
-                event.preventDefault(); // Empêche l'action par défaut
-                const focusableElements = this.lightbox.querySelectorAll(
-                    '.lightbox_prev, .lightbox_next, .lightbox_close'
-                ); // Sélectionne tous les éléments focusables
-                const currentFocusIndex = Array.from(focusableElements).indexOf(document.activeElement); // Trouve l'index de l'élément actuellement focusé
-                const nextIndex = (currentFocusIndex + 1 >= focusableElements.length) ? 0 : (currentFocusIndex + 1); // Calcule l'index du prochain élément
-                const prevIndex = (currentFocusIndex - 1 < 0) ? (focusableElements.length - 1) : (currentFocusIndex - 1); // Calcule l'index de l'élément précédent
-                const targetElement = (event.key === 'ArrowDown') ? focusableElements[nextIndex] : focusableElements[prevIndex]; // Choisit l'élément cible en fonction de la touche enfoncée
-                targetElement.focus(); // Met le focus sur l'élément cible
+        // Vérifie si la lightbox est actuellement affichée
+        if (this.lightbox.style.display === 'block') {
+            
+            // Gère les actions basées sur la touche enfoncée
+            switch (event.key) {
+                
+                // Si la touche "Échap" est enfoncée
+                case 'Escape':
+                    this.closeLightbox(); // Ferme la lightbox
+                    break;
+    
+                // Si la touche flèche droite est enfoncée
+                case 'ArrowRight':
+                    event.preventDefault(); // Empêche l'action par défaut de la touche (par exemple, défilement)
+                    this.showNext(); // Affiche le média suivant dans la lightbox
+                    document.querySelector('.lightbox_next').focus(); // Met le focus sur le bouton "suivant"
+                    break;
+    
+                // Si la touche flèche gauche est enfoncée
+                case 'ArrowLeft':
+                    event.preventDefault(); // Empêche l'action par défaut de la touche (par exemple, défilement)
+                    this.showPrev(); // Affiche le média précédent dans la lightbox
+                    document.querySelector('.lightbox_prev').focus(); // Met le focus sur le bouton "précédent"
+                    break;
+    
+                // Si la touche flèche bas ou haut est enfoncée
+                case 'ArrowDown':
+                case 'ArrowUp':
+                    event.preventDefault(); // Empêche l'action par défaut de la touche (par exemple, défilement)
+                    
+                    // Sélectionne tous les éléments focusables dans la lightbox
+                    const focusableElements = this.lightbox.querySelectorAll(
+                        '.lightbox_close, .lightbox_prev, .lightbox_next'
+                    );
+                    
+                    // Trouve l'index de l'élément actuellement focusé
+                    const currentFocusIndex = Array.from(focusableElements).indexOf(document.activeElement);
+                    
+                    // Nombre total d'éléments focusables
+                    const totalElements = focusableElements.length;
+                    
+                    // Détermine l'index du prochain ou précédent élément focusable en fonction de la touche enfoncée
+                    const targetIndex = event.key === 'ArrowDown' 
+                        ? (currentFocusIndex + 1 >= totalElements ? 0 : currentFocusIndex + 1) // Pour la flèche bas : passe au suivant ou au premier si c'est le dernier
+                        : (currentFocusIndex - 1 < 0 ? totalElements - 1 : currentFocusIndex - 1); // Pour la flèche haut : passe au précédent ou au dernier si c'est le premier
+                    
+                    // Met le focus sur l'élément cible
+                    focusableElements[targetIndex].focus();
+                    break;
             }
         }
     }

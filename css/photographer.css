@@ -524,8 +524,8 @@ form textarea {
 
 input[data-error-visible="true"],
 textarea[data-error-visible="true"] {
-  border: 3px solid #f20101 !important; /* Bordure rouge pour indiquer une erreur */
-  outline: none !important; /* Enleve le outline rouge personnalisé */
+  border: 3px solid #ff0000 !important; /* Bordure rouge pour indiquer une erreur */
+  outline: none !important; /* Enlève le outline rouge personnalisé */
 }
 
 /* Réserve de l'espace pour les messages d'erreur */
@@ -536,10 +536,10 @@ form div {
 span.error-message {
   display: block;
   width: 105%;
-  color: #f20101; /* Couleur rouge pour le message d'erreur */
+  color: #000dbe; /* Couleur bleue pour faire ressortir le message d'erreur */
   font-weight: 600;
-  font-size: 0.875em;
-  margin-top: 0.25em; /* Espacement au-dessus du message d'erreur */
+  font-size: 1.1em;
+  margin-top: 0.10em; /* Espacement au-dessus du message d'erreur */
   height: 1em; /* Réserve un espace fixe pour le message d'erreur */
   visibility: hidden; /* Cache le message d'erreur */
 }
