@@ -1,3 +1,4 @@
+////////////////////////  CREATIONAL DESIGN PATTERN => dédié à la création d'objets //////////////////////////////
 ////////////////////////////// LIGHTBOX /////////////////////////////////////////////////
 // Classe représentant une lightbox pour afficher des médias en plein écran = Modèle/Plan pour créer un objet Lightbox 
 export class Lightbox {

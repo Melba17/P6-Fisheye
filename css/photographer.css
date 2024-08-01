@@ -536,10 +536,10 @@ form div {
 span.error-message {
   display: block;
   width: 105%;
-  color: #000dbe; /* Couleur bleue pour faire ressortir le message d'erreur */
+  color: #010ca3; /* Couleur bleue pour faire ressortir le message d'erreur */
   font-weight: 600;
   font-size: 1.1em;
-  margin-top: 0.10em; /* Espacement au-dessus du message d'erreur */
+  margin-top: 0.1em; /* Espacement au-dessus du message d'erreur */
   height: 1em; /* Réserve un espace fixe pour le message d'erreur */
   visibility: hidden; /* Cache le message d'erreur */
 }

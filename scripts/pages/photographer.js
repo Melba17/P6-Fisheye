@@ -1,7 +1,7 @@
 /////////////////////////// PAGE PHOTOGRAPHE /////////////////////////////////////////////////////////
 // Import de la Factory pour les médias
 import { MediaFactory } from '../patterns/mediaFactory.js'; // Importation de la classe MediaFactory pour la création des objets média
-import { Lightbox } from '../utils/lightbox.js'; // Importation de la classe Lightbox pour gérer l'affichage des images en mode lightbox
+import { Lightbox } from '../patterns/lightbox.js'; // Importation de la classe Lightbox pour gérer l'affichage des images en mode lightbox
 
 // Fonction pour récupérer les données des photographes et des médias dans le fichier JSON //
 // La fonction getData utilise la méthode fetch pour effectuer une requête HTTP au fichier JSON situé à l'URL "./data/photographers.json". Cette requête est envoyée par le navigateur au "serveur" c'est à dire ici l'environnement local (Live Server) pour obtenir les données du fichier JSON.
