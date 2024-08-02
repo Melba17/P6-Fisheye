@@ -3,7 +3,7 @@
 
 // Instruction qui importe la fonction "photographerTemplate" à partir du module/fichier "photographer.js" pour pouvoir l'utiliser ici
 import { photographerTemplate } from "../templates/photographer.js";
-import { createModal, openModal, closeModal, validateForm } from "../utils/contactForm.js";
+import { createModal, openModal } from "../utils/contactForm.js";
 
 // RECUPERATION DES DONNEES JSON 
 // opération asynchrone avec "async" et "await" pour traiter la réponse du serveur: c'est à dire permet au navigateur d'afficher normalement les infos à l'écran en attendant la réponse du serveur
@@ -30,26 +30,35 @@ async function getPhotographers() {
         console.error('Erreur lors de la récupération des photographes :', error);
     }
 }
-
 // "try/catch" ou "throw new error" pour centraliser et gérer nous-même les erreurs si il y en a. Donc la console ne pourra plus afficher "uncaught".
+
 
 /////////////////// 2 FONCTIONS INTERDEPENDANTES : LA 1ERE EXTRAT l'ID DU PHOTOGRAPHE À PARTIR DE L'URL - LA 2EME UTILISE CET ID POUR AFFICHER LES DETAILS DU PHOTOGRAPHE DANS SA BANNIERE ////////////////////
 // Fonction pour récupérer l'ID du photographe à partir de l'URL
-function getPhotographerIdFromUrl() {
-    // Création de l'objet URL / "new URL" crée un nouvel objet URL basé sur cette URL complète / "window.location.href" récupère l'URL complète actuellement affichée dans la barre d'adresse du navigateur = en facilite la manipulation
-    const url = new URL(window.location.href);
-    
-    // Récupère et retourne l'id du photographe en question situé à la fin de l'url (ex : ?id=243)
-    return url.searchParams.get('id');
-}
+
+    function getPhotographerIdFromUrl() {
+        // Crée un nouvel objet URL basé sur l'URL actuelle
+        const url = new URL(window.location.href);     
+        // Récupère la valeur du paramètre 'id' de l'URL sous forme de chaîne de caractères
+        const id = url.searchParams.get('id');  
+        // Convertit immédiatement la chaîne de caractères en nombre et retourne le résultat
+        return id ? parseInt(id) : null; 
+    }
+
 
 // Fonction asynchrone pour afficher les informations spécifiques d'un photographe dans sa bannière en fonction de son ID
+// "photographerId" est extrait de "getPhotographerIdFromUrl" au-dessus
 async function displayPhotographerDetails(photographerId) {
     // Récupération des données JSON globales contenant la liste des photographes / fonction getPhotographers() ci-dessus
     const photographers = await getPhotographers();
     
-    // Recherche du photographe correspondant à l'ID fourni donc parcourt la liste des photographes et retourne le photographe dont l'ID correspond à photographerId
-    const photographer = photographers.find(p => p.id == photographerId);
+    // Trouve le photographe dont l'ID correspond à photographerId dans le tableau des photographes des données JSON
+    // p.id = données JSON (p.id étant issu de getPhotographers au-dessus) et photographerId = ID extrait de l'URL
+    // La comparaison stricte '===' assure que l'ID est bien un nombre et pas une chaîne de caractères.
+    // Le photographe trouvé est stocké dans la variable 'photographer'.
+    const photographer = photographers.find(p => p.id === photographerId);
+
+
 
     // Vérification si le photographe a été trouvé
     if (photographer) {
@@ -82,18 +91,6 @@ async function displayPhotographerDetails(photographerId) {
 
         // Gestion de l'ouverture et de la fermeture de la modale
         document.querySelector(".contact_button").addEventListener("click", openModal);
-        document.querySelector(".modal_close").addEventListener("click", closeModal);
-        
-        
-        // Validation du formulaire lors de la soumission
-        document.querySelector("form").addEventListener("submit", function(event) {
-            if (validateForm()) {
-                console.log("Le formulaire est envoyé."); // Affichage d'un message de succès
-                closeModal(); // Fermeture de la modale après soumission réussie
-            } else {
-                event.preventDefault(); // Empêche la soumission du formulaire en cas d'erreur
-            }
-        });
 
     } else {
         // Affichage d'une erreur dans la console si le photographe n'a pas été trouvé
@@ -114,8 +111,7 @@ async function displayData(photographers) {
     photographers.forEach((photographer) => {
         // Génération du modèle de photographe à l'aide de la fonction template
         const photographerModel = photographerTemplate(photographer);
-        const userCardDOM = photographerModel.getUserCardDOM();
-        
+        const userCardDOM = photographerModel.getUserCardDOM();       
         // Ajout des vignettes à la section HTML DOM
         photographersSection.appendChild(userCardDOM);
     });

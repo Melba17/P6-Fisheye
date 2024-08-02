@@ -33,7 +33,7 @@ async function getData() {
  */
 function getPhotographerIdFromURL() {
     const urlParams = new URLSearchParams(window.location.search); // Crée un objet URLSearchParams pour analyser les paramètres de l'URL
-    const id = urlParams.get('id'); // Récupère la valeur du paramètre 'id'
+    const id = urlParams.get('id'); // Récupère la valeur du paramètre 'id' sous forme de chaîne de caractères
     return id ? parseInt(id) : null; // Retourne l'ID sous forme de nombre ou null si l'ID n'existe pas
 }
 

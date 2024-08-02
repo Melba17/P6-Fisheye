@@ -51,8 +51,7 @@ export function photographerTemplate(data) {
         p.id = `photographer-tagline-${id}`;
         // Définition du texte de la tagline
         p.textContent = tagline;
-        // Ajouter un label ARIA pour l'élément <strong> pour améliorer l'accessibilité
-        p.setAttribute("aria-labelledby", `photographer-tagline-${id}`);
+        
         
         // Création de l'élément <span> pour afficher le prix par jour
         const span = document.createElement('span');
@@ -91,8 +90,6 @@ export function photographerTemplate(data) {
         strong.id = `photographer-tagline-specific-${id}`;
         // Définition du texte de la tagline
         strong.textContent = tagline;
-        // Ajouter un label ARIA pour l'élément <strong> pour améliorer l'accessibilité
-        strong.setAttribute("aria-labelledby", `photographer-tagline-specific-${id}`);
 
         // Création de l'image du photographe
         const img = document.createElement('img');

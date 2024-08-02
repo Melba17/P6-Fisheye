@@ -3,17 +3,14 @@ export function createModal() {
     // Crée un conteneur pour la modale
     const modalContainer = document.createElement('div');
     
-    // Assigne un identifiant unique pour le conteneur de la modale
+    // Assigne un identifiant unique pour le conteneur de la modale qui sert à ouvrir/fermer la modale
     modalContainer.id = "contact_modal";
     
     // Définit le rôle de la modale pour les technologies d'assistance
-    modalContainer.role = "dialog";
+    modalContainer.setAttribute('role', 'dialog');
     
     // Ajoute une classe CSS pour le style de fond de la modale
     modalContainer.className = "bckg_modal";
-    
-    // Décrit le titre de la modale pour les technologies d'assistance
-    modalContainer.setAttribute('aria-labelledby', "Contactez-moi");
     
     // Cache la modale par défaut
     modalContainer.style.display = "none";
@@ -23,33 +20,33 @@ export function createModal() {
     <div class="modal">
         <header>
             <div class="modal-header-content">
-                <h2 id="Contactez-moi">Contactez-moi</h2>
+                <h2>Contactez-moi</h2>
                 <div class="photographer-name"></div> 
             </div>
-            <button class="modal_close" aria-label="bouton de fermeture" type="button"></button>
+            <button class="modal_close" type="button"></button>
         </header>
         <form name="contactForm" action="" method="get" novalidate>
             <div>
-                <label for="first" id="label-first">Prénom</label>
-                <input class="text-control" type="text" id="first" name="first" aria-labelledby="label-first" />
+                <label for="first">Prénom</label>
+                <input class="text-control" type="text" id="first" name="first" />
                 <span class="error-message"></span>
             </div>
             <div>
-                <label for="last" id="label-last">Nom</label>
-                <input class="text-control" type="text" id="last" name="last" aria-labelledby="label-last" />
+                <label for="last">Nom</label>
+                <input class="text-control" type="text" id="last" name="last" />
                 <span class="error-message"></span>
             </div>
             <div>
-                <label for="email" id="label-email">E-mail</label>
-                <input class="text-control" type="email" id="email" name="email" aria-labelledby="label-email" />
+                <label for="email">E-mail</label>
+                <input class="text-control" type="email" id="email" name="email" />
                 <span class="error-message"></span>
             </div>
             <div>
-                <label for="message" id="label-message">Votre message</label>
-                <textarea name="message" id="message" class="text-control" aria-labelledby="label-message"></textarea>
+                <label for="message">Votre message</label>
+                <textarea name="message" id="message" class="text-control"></textarea>
                 <span class="error-message"></span>
             </div>
-            <button class="submit_button" type="submit" aria-label="envoyer">Envoyer</button>
+            <button class="submit_button" type="submit">Envoyer</button>
         </form>
     </div>
 `;
@@ -57,45 +54,59 @@ export function createModal() {
     // Ajoute le conteneur de la modale au body du document
     document.body.appendChild(modalContainer);
 
-    // Ajoute des gestionnaires d'événements aux champs du formulaire pour la validation et le logging
+    // Configure l'attribut aria-labelledby pour indiquer quel photographe peut être contacté
+    const modal = document.getElementById('contact_modal');
+    modal.setAttribute('aria-labelledby', 'contact_modal_title');
+    // Ajout de l'attribut id au h2
+    const modalTitle = document.querySelector('.modal-header-content h2');
+    if (modalTitle) {
+        modalTitle.id = 'contact_modal_title';
+    }
+    
+    // Ajoute un gestionnaire d'événements pour la croix de fermeture de la modale
+    const closeButton = document.querySelector('.modal_close');
+    if (closeButton) {
+        // Ajoute l'aria-label 
+        closeButton.setAttribute('aria-label', 'Bouton de fermeture');
+        closeButton.addEventListener('click', closeModal);
+    }
+
+    // Ajoute l'aria-label au bouton submit 
+    const submitButton = document.querySelector('.submit_button');
+    if (submitButton) {
+        submitButton.setAttribute('aria-label', 'Envoyer le formulaire');
+    }
+    
+
+    // Ajout des gestionnaires d'événements aux champs du formulaire pour la validation et le logging
     const fields = ['first', 'last', 'email', 'message'];
     fields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
-            // Ajoute un écouteur d'événement pour la perte de focus (blur)
             field.addEventListener('blur', () => {
-                validateField(fieldId); // Valide le champ
-                logFieldValue(fieldId); // Logge la valeur du champ
+                validateField(fieldId);
+                logFieldValue(fieldId);
             });
         }
     });
 
-    // Ajoute un gestionnaire d'événements pour la soumission du formulaire
-    document.querySelector("form").addEventListener("submit", function(event) {
+    // Ajout d'un gestionnaire d'événements pour la soumission du formulaire
+    modal.querySelector("form").addEventListener("submit", function(event) {
         if (!validateForm()) {
-            // Si le formulaire n'est pas valide, empêche la soumission
             event.preventDefault();
         } else {
-            // Si le formulaire est valide
-            event.preventDefault(); // Empêche la soumission réelle
+            event.preventDefault();
             const photographerId = new URLSearchParams(window.location.search).get('id');
             if (photographerId) {
-                // Redirige vers la page du photographe avec l'ID dans l'URL
                 window.location.href = `photographer.html?id=${photographerId}`;
-                // Réinitialise le formulaire après un petit délai pour permettre la redirection
                 setTimeout(() => {
-                    resetForm(); // Réinitialise les champs du formulaire
+                    resetForm();
                 }, 100);
             }
         }
     });
-
-    // Assure que le bouton de fermeture a un gestionnaire d'événement pour fermer la modale
-    const closeButton = document.querySelector('.modal_close');
-    if (closeButton) {
-        closeButton.addEventListener('click', closeModal);
-    }
 }
+
 
 export function openModal() {
     toggleModal(true); // Affiche la modale
