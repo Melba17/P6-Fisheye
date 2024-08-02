@@ -207,27 +207,30 @@ export class Lightbox {
             switch (event.key) {
                 
                 // Si la touche "Échap" est enfoncée
-                case 'Escape':
+                case 'Escape': {
                     this.closeLightbox(); // Ferme la lightbox
                     break;
+                }
     
                 // Si la touche flèche droite est enfoncée
-                case 'ArrowRight':
+                case 'ArrowRight': {
                     event.preventDefault(); // Empêche l'action par défaut de la touche (par exemple, défilement)
                     this.showNext(); // Affiche le média suivant dans la lightbox
                     document.querySelector('.lightbox_next').focus(); // Met le focus sur le bouton "suivant"
                     break;
+                }
     
                 // Si la touche flèche gauche est enfoncée
-                case 'ArrowLeft':
+                case 'ArrowLeft': {
                     event.preventDefault(); // Empêche l'action par défaut de la touche (par exemple, défilement)
                     this.showPrev(); // Affiche le média précédent dans la lightbox
                     document.querySelector('.lightbox_prev').focus(); // Met le focus sur le bouton "précédent"
                     break;
+                }
     
                 // Si la touche flèche bas ou haut est enfoncée
                 case 'ArrowDown':
-                case 'ArrowUp':
+                case 'ArrowUp': {
                     event.preventDefault(); // Empêche l'action par défaut de la touche (par exemple, défilement)
                     
                     // Sélectionne tous les éléments focusables dans la lightbox
@@ -249,7 +252,9 @@ export class Lightbox {
                     // Met le focus sur l'élément cible
                     focusableElements[targetIndex].focus();
                     break;
+                }
             }
         }
     }
+    
 }
