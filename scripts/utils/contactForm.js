@@ -78,7 +78,7 @@ export function createModal() {
     }
     
 
-    // Ajout des gestionnaires d'événements aux champs du formulaire pour la validation et le logging
+    // Gestionnaires d'événements pour chaque champ du formulaire en validation immédiate et le logging
     const fields = ['first', 'last', 'email', 'message'];
     fields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
@@ -90,24 +90,36 @@ export function createModal() {
         }
     });
 
-    // Ajout d'un gestionnaire d'événements pour la soumission du formulaire
+    // Gestionnaire d'événements pour la soumission du formulaire lors de la soumission avec le bouton "envoyer"
     modal.querySelector("form").addEventListener("submit", function(event) {
+        // Empêche la soumission par défaut du formulaire
+        event.preventDefault();
+        // Si le formulaire n'est pas valide, rester sur le formulaire jusqu'à ce qu'il soit correctement rempli
         if (!validateForm()) {
-            event.preventDefault();
+            return; 
+        }
+        // Continue seulement si la validation réussit 
+        // window.location.search renvoie à la fin de la chaîne de requête de l'URL actuelle
+        // new URLSearchParams(...) crée un objet URLSearchParams représentant cette chaîne
+        const photographerId = new URLSearchParams(window.location.search).get('id');
+
+        if (photographerId) {
+            // Redirige vers la page du photographe en question
+            window.location.href = `photographer.html?id=${photographerId}`;
+    
+            // Réinitialise le formulaire après un délai mais ne sera pas visible car la redirection se produit presque immédiatement
+            setTimeout(() => {
+                resetForm();
+            }, 100);
         } else {
-            event.preventDefault();
-            const photographerId = new URLSearchParams(window.location.search).get('id');
-            if (photographerId) {
-                window.location.href = `photographer.html?id=${photographerId}`;
-                setTimeout(() => {
-                    resetForm();
-                }, 100);
-            }
+            console.error("L'identifiant du photographe est manquant dans l'URL.");
         }
     });
+    
+    
 }
 
-
+// Pour afficher la modale depuis la page Photographe
 export function openModal() {
     toggleModal(true); // Affiche la modale
 
@@ -124,10 +136,11 @@ export function openModal() {
     document.addEventListener('keydown', handleArrowKeyNavigation);
 }
 
-export function closeModal() {
+
+    function closeModal() {
     toggleModal(false); // Masque la modale
 
-    // Retire le gestionnaire de la navigation avec les flèches du clavier lorsqu'elle est fermée
+    // Retire le gestionnaire de la navigation avec les flèches du clavier lorsque la modale est fermée
     document.removeEventListener('keydown', handleArrowKeyNavigation);
 }
 
@@ -181,14 +194,16 @@ function handleArrowKeyNavigation(event) {
 
     if (event.key === 'ArrowDown') {
         event.preventDefault(); // Empêche le comportement par défaut
+        // La condition if (activeElementIndex < focusableElements.length - 1) vérifie si l'élément focalisé n'est pas déjà le dernier élément de la liste...
         if (activeElementIndex < focusableElements.length - 1) {
-            // Passe au prochain élément focusable
+            // ... si ce n'est pas le cas, le code passe au prochain élément en incrémentant
             focusableElements[activeElementIndex + 1].focus();
         }
     } else if (event.key === 'ArrowUp') {
         event.preventDefault(); // Empêche le comportement par défaut
+        // Si l'élément focalisé n'est pas déjà le premier élément de la liste..
         if (activeElementIndex > 0) {
-            // Passe à l'élément focusable précédent
+            // ... passe à l'élément focusable précédent
             focusableElements[activeElementIndex - 1].focus();
         }
     }
@@ -206,7 +221,7 @@ function trapFocus(element) {
     const firstFocusableElement = focusableElements[0];
     const lastFocusableElement = focusableElements[focusableElements.length - 1];
 
-    // Ajoute un gestionnaire d'événements pour capturer la touche Tab. Le "9" est un code de touche (ou keyCode) correspondant à la touche Tabulation (Tab) du clavier
+    // Ajoute un gestionnaire d'événements pour capturer la touche Tab. Le "9" est le code de cette touche (ou keyCode) 
     element.addEventListener('keydown', (e) => {
         const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
 
@@ -235,19 +250,40 @@ function trapFocus(element) {
     }
 }
 
-function validateField(fieldId) {
+// Fonction pour nettoyer les champs
+function getFieldValue(fieldId) {
     const field = document.getElementById(fieldId);
-    if (!field) return false;
-
-    // Utilise trim() pour les champs 'first' et 'last' afin d'éliminer les espaces superflus
+    // Si le champ n'existe pas retourne une chaîne vide donc rien à afficher
+    if (!field) return '';
+    // Applique trim() aux champs spécifiques
     let value = field.value;
-    if (fieldId === 'first' || fieldId === 'last') {
+    if (fieldId === 'first' || fieldId === 'last' || fieldId === 'email') {
         value = value.trim();
     }
+    return value;
+}
+
+// Fonction qui affiche les valeurs des champs 'first', 'last' et 'email' dans la console
+function logFieldValue(fieldId) {
+    const value = getFieldValue(fieldId);
+    if (fieldId === 'first' || fieldId === 'last' || fieldId === 'email') {
+        console.log(`${fieldId}: ${value}`);
+    }
+}
+
+// Fonction de test pour les champs
+function validateField(fieldId) {
+    // Utilise getFieldValue pour obtenir la valeur du champ
+    const value = getFieldValue(fieldId);
+
+    // Sélectionne l'élément du DOM correspondant au champ
+    const field = document.getElementById(fieldId);
+    if (!field) return false; // Retourne false si le champ n'existe pas
 
     // Définit les fonctions de validation pour chaque champ
     const validators = {
         // {2,} => le groupe de caractères précédent doit apparaître au moins 2 fois et le fait de ne pas spécifier une valeur maximale après la virgule signifie qu'il n'y a pas de limite supérieure sur le nombre d'occurrences
+        // .test() = méthode des objets RegExp (expressions régulières) / "value" la valeur rentrée par l'utilisateur
         'first': value => /^[a-zA-Z]{2,}$/.test(value),
         'last': value => /^[a-zA-Z]{2,}$/.test(value),
         'email': value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9._-]+$/.test(value),
@@ -286,21 +322,7 @@ function validateField(fieldId) {
     return condition;
 }
 
-function logFieldValue(fieldId) {
-    const field = document.getElementById(fieldId);
-    if (!field) return;
 
-    // Utilise trim() pour les champs 'first' et 'last' afin d'éliminer les espaces superflus
-    let value = field.value;
-    if (fieldId === 'first' || fieldId === 'last') {
-        value = value.trim();
-    }
-
-    // Affiche les valeurs des champs 'first', 'last' et 'email' dans la console
-    if (fieldId === 'first' || fieldId === 'last' || fieldId === 'email') {
-        console.log(`${fieldId}: ${value}`);
-    }
-}
 
 function resetForm() {
     // Sélectionne le formulaire
@@ -309,13 +331,14 @@ function resetForm() {
         form.reset(); // Réinitialise les champs du formulaire
         // Réinitialise les messages d'erreur
         document.querySelectorAll('.error-message').forEach(span => {
-            span.textContent = '';
+            span.textContent = ''; // chaîne vide
             span.setAttribute('data-error-visible', 'false');
         });
     }
 }
 
-export function validateForm() {
-    // Valide chaque champ et retourne vrai si tous les champs sont valides
+// Fonction de validation finale
+function validateForm() {
+    // Valide chaque champ et retourne vrai si tous les champs sont valides 
     return ['first', 'last', 'email', 'message'].every(validateField);
 }

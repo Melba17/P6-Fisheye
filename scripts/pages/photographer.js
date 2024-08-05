@@ -95,8 +95,8 @@ function createSortButton(medias, photographerName) {
     sortButtonDOM(medias, photographerName); // Initialise le menu déroulant avec les options de tri
 }
 
-// Fonction pour initialiser la lightbox
-function initializeLightbox() {
+// Fonction pour réinitialiser la lightbox si il y en a eu déjà une de créée
+function reinitializeLightbox() {
     // Supprimer l'ancienne lightbox s'il en existe une
     const existingLightbox = document.querySelector('.lightbox'); // Sélectionne la lightbox existante
     if (existingLightbox) {
@@ -180,7 +180,7 @@ function sortButtonDOM(originalMedias, photographerName) {
                     });
 
                     // Réinitialiser la lightbox
-                    initializeLightbox(); // Initialise la lightbox pour les nouveaux médias
+                    reinitializeLightbox(); // Initialise la lightbox pour les nouveaux médias
                 });
             }
         });
@@ -202,7 +202,7 @@ function sortButtonDOM(originalMedias, photographerName) {
 }
 
 /**
- * Fonction pour afficher le prix par jour
+ * Fonction pour afficher, dans l'encart du photographe, le prix par jour et le nombre total de Likes
  * @param {number} price - Le prix par jour du photographe
  * @param {number} totalLikes - Le nombre total de likes
  */
@@ -299,7 +299,7 @@ async function displayPhotographerPage() {
         displayDailyPrice(photographer.price, totalLikes); // Affiche le prix par jour et le total des likes
 
         // Réinitialise la lightbox
-        initializeLightbox(); // Initialise la lightbox pour les nouveaux médias
+        reinitializeLightbox(); // Initialise la lightbox pour les nouveaux médias
     } catch (error) {
         console.error('Une erreur est survenue :', error); // Affiche les erreurs éventuelles
     }

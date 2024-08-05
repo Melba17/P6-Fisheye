@@ -1,6 +1,6 @@
 ////////// SQUELETTE DES VIGNETTES PAGE ACCUEIL ///////////////
 // La fonction photographerTemplate(data) retourne un objet contenant les informations du photographe ainsi que des méthodes pour créer des éléments DOM.
-// Cela permet de créer des vignettes pour chaque photographe sur la page d'accueil et de générer des éléments spécifiques pour la page du photographe de manière modulaire.
+// Cela permet de créer des vignettes pour chaque photographe sur la page d'accueil ou de générer des éléments spécifiques pour leur bannière perso dans la page du photographe, de manière modulaire.
 
 export function photographerTemplate(data) {
     // Extraction des propriétés nécessaires du photographe à partir des données JSON
@@ -18,9 +18,9 @@ export function photographerTemplate(data) {
         const link = document.createElement('a');
         // Définition du lien vers la page du photographe en utilisant son ID
         link.setAttribute("href", `photographer.html?id=${id}`);
-        // Rendre le lien focusable pour les utilisateurs utilisant la navigation au clavier
+        // Rend le lien focusable pour les utilisateurs utilisant la navigation au clavier
         link.setAttribute("tabindex", "0");
-        // Ajouter un label ARIA pour améliorer l'accessibilité en décrivant le lien
+        // Ajoute un label ARIA à destination des TA pour améliorer l'accessibilité en décrivant le lien
         link.setAttribute("aria-label", `Lien vers la page du photographe ${name}`);
 
         // Création de l'image du photographe
@@ -102,7 +102,7 @@ export function photographerTemplate(data) {
         const elements = { h2, h3, strong, img };
         // Affichage de l'objet dans la console (utilisé pour le débogage)
         console.log(elements);
-        // Retourne l'objet contenant les éléments spécifiques à la page du photographe
+        // Retourne l'objet contenant les éléments spécifiques - page du photographe
         return elements;
     }
 

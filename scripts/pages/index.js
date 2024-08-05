@@ -2,28 +2,31 @@
 ////////////////////////////////////////////////////////////////////////////
 
 // Instruction qui importe la fonction "photographerTemplate" à partir du module/fichier "photographer.js" pour pouvoir l'utiliser ici
-import { photographerTemplate } from "../templates/photographer.js";
+import { photographerTemplate } from "../templates/photographers.js";
 import { createModal, openModal } from "../utils/contactForm.js";
 
 // RECUPERATION DES DONNEES JSON 
 // opération asynchrone avec "async" et "await" pour traiter la réponse du serveur: c'est à dire permet au navigateur d'afficher normalement les infos à l'écran en attendant la réponse du serveur
+// "asynch" mot-clé qui permet à la fonction de s'exécuter même si cela prend du temps, sans bloquer l'exécution du reste du code
 async function getPhotographers() {
     try {
         // Requête "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données du fichier
+        // "await" = mot-clé utilisé pour attendre que la promesse/réponse renvoyée par la fonction async soit résolue/finie. S'utilise uniquement à l'intérieur des fonctions async
         const response = await fetch("./data/photographers.json");
         
         // Vérifie que la réponse est correcte sinon on signale un problème
         if (!response.ok) {
+            // exemples "status" = 200 : OK - La requête a réussi, et la réponse contient les données demandées / 404 : Not Found - Le serveur n'a pas trouvé la ressource demandée / 500 : Internal Server Error - Une erreur s'est produite sur le serveur etc...
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        // Stockage de la réponse du serveur dans la variable "data" avec désérialisation du fichier JSON - ici réponse sous forme d'objet lisible par le navigateur
+        // Ensuite, stockage de la réponse du serveur dans la variable "data" avec désérialisation du fichier JSON - ici réponse sous forme d'objet lisible par le navigateur
         const data = await response.json();
         
         // Debugging : affichage des données récupérées dans la console
         console.log('Données récupérées :', data);
         
-        // Retourne le tableau des photographes
+        // Retourne le tableau des photographes à partir des données JSON récupérées = instruction 
         return data.photographers;
     } catch (error) {
         // Affichage d'une erreur en cas de problème lors de la récupération des données
@@ -41,20 +44,20 @@ async function getPhotographers() {
         const url = new URL(window.location.href);     
         // Récupère la valeur du paramètre 'id' de l'URL sous forme de chaîne de caractères
         const id = url.searchParams.get('id');  
-        // Convertit immédiatement la chaîne de caractères en nombre et retourne le résultat
+        // Convertit immédiatement la chaîne de caractères en nombre et retourne le résultat donc soit nombre, soit null
         return id ? parseInt(id) : null; 
     }
 
-
+//////////////////////////////////// BANNIERE PAGE PHOTOGRAPHE ////////////////////////////////////////////////////////////
 // Fonction asynchrone pour afficher les informations spécifiques d'un photographe dans sa bannière en fonction de son ID
 // "photographerId" est extrait de "getPhotographerIdFromUrl" au-dessus
 async function displayPhotographerDetails(photographerId) {
     // Récupération des données JSON globales contenant la liste des photographes / fonction getPhotographers() ci-dessus
     const photographers = await getPhotographers();
     
-    // Trouve le photographe dont l'ID correspond à photographerId dans le tableau des photographes des données JSON
-    // p.id = données JSON (p.id étant issu de getPhotographers au-dessus) et photographerId = ID extrait de l'URL
-    // La comparaison stricte '===' assure que l'ID est bien un nombre et pas une chaîne de caractères.
+    // find() = méthode qui utilise une fonction fléchée pour trouver le photographe 
+    // p.id = données JSON (p.id étant issu de getPhotographers au-dessus) et photographerId = ID extrait de l'URL actuelle
+    // La comparaison stricte '===' assure que l'ID est bien un nombre et pas une chaîne de caractères. Comparaison stricte qui vérifie à la fois la valeur et le type des deux opérandes
     // Le photographe trouvé est stocké dans la variable 'photographer'.
     const photographer = photographers.find(p => p.id === photographerId);
 
@@ -98,10 +101,8 @@ async function displayPhotographerDetails(photographerId) {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
 
-/////// INSERTION DES ELEMENTS VIGNETTES DANS LE DOM POUR LA PAGE D'ACCUEIL ///////////
+///////////////// INSERTION DES ELEMENTS VIGNETTES DANS LE DOM POUR LA PAGE D'ACCUEIL /////////////////
 // Fonction pour insérer les vignettes des photographes dans le DOM pour la page d'accueil
 async function displayData(photographers) {
     // Récupération de la section où l'on veut insérer les vignettes
@@ -117,22 +118,21 @@ async function displayData(photographers) {
     });
 }
 
-//// AFFICHAGES FINAUX /////
+//// AFFICHAGES FINALS : PAGE ACCUEIL ET BANNIERE PAGE PHOTOGRAPHE /////
 async function init() {
     // Récupération de l'ID du photographe depuis l'URL
     const photographerId = getPhotographerIdFromUrl();
-    
-    // Si un ID est présent, afficher les détails du photographe
+    // Si un ID est présent, afficher les détails du photographe dans sa bannière
     if (photographerId) {
         await displayPhotographerDetails(photographerId);
     } else {
-        // Sinon, récupérer et afficher les données des photographes
+        // Sinon, récupère et affiche les données des photographes...
         const photographers = await getPhotographers();
         if (photographers) {
-            displayData(photographers); // Affichage des vignettes des photographes
+            displayData(photographers); // ... et affiche les vignettes des photographes en page Accueil
         }
     }
 }
 
-// Activation/Appel de la fonction
+// Activation/Appel immédiat de la fonction
 init();
