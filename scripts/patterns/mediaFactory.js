@@ -253,7 +253,7 @@ class MediaFactory {
      * @param {string} photographerName - Le prénom du photographe.
      * @returns {Media} Une instance de ImageMedia ou VideoMedia selon les données fournies.
      */
-    // "static" fait référence à la classe de base et non aux instances de celle-ci. Cela signifie aussi qu'on peut accéder directement à ses propriétés (ditent "static") sans avoir à créer une instance de cette classe.
+    // "static" fait référence à la classe de base et non aux instances de celle-ci. Cela signifie aussi qu'on peut accéder directement à ses propriétés (ditent "static") sans avoir à créer une instance de cette classe. Création de la méthode createMedia.
     static createMedia(data, photographerName) {
         // Vérifie si les données contiennent un chemin pour une image.
         if (data.image) {

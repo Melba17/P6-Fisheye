@@ -3,6 +3,7 @@
 
 // Instruction qui importe la fonction "photographerTemplate" à partir du module/fichier "photographer.js" pour pouvoir l'utiliser ici
 import { photographerTemplate } from "../templates/photographers.js";
+// Instruction qui importe les fonctions "createModal" et "openModal" à partir du module/fichier "contactForm.js" pour pouvoir l'utiliser ici
 import { createModal, openModal } from "../utils/contactForm.js";
 
 // RECUPERATION DES DONNEES JSON 
@@ -10,7 +11,7 @@ import { createModal, openModal } from "../utils/contactForm.js";
 // "asynch" mot-clé qui permet à la fonction de s'exécuter même si cela prend du temps, sans bloquer l'exécution du reste du code
 async function getPhotographers() {
     try {
-        // Requête "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données du fichier
+        // Méthode/Requête HTTP "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données/ressources du fichier = en bref, simule une API
         // "await" = mot-clé utilisé pour attendre que la promesse/réponse renvoyée par la fonction async soit résolue/finie. S'utilise uniquement à l'intérieur des fonctions async
         const response = await fetch("./data/photographers.json");
         
@@ -44,7 +45,7 @@ async function getPhotographers() {
         const url = new URL(window.location.href);     
         // Récupère la valeur du paramètre 'id' de l'URL sous forme de chaîne de caractères
         const id = url.searchParams.get('id');  
-        // Convertit immédiatement la chaîne de caractères en nombre et retourne le résultat donc soit nombre, soit null
+        // Convertit immédiatement la chaîne de caractères en nombre et retourne le résultat donc soit un nombre, soit null
         return id ? parseInt(id) : null; 
     }
 
@@ -56,8 +57,8 @@ async function displayPhotographerDetails(photographerId) {
     const photographers = await getPhotographers();
     
     // find() = méthode qui utilise une fonction fléchée pour trouver le photographe 
-    // p.id = données JSON (p.id étant issu de getPhotographers au-dessus) et photographerId = ID extrait de l'URL actuelle
-    // La comparaison stricte '===' assure que l'ID est bien un nombre et pas une chaîne de caractères. Comparaison stricte qui vérifie à la fois la valeur et le type des deux opérandes
+    // p.id = données JSON, provient indirectement de la fonction getPhotographers() et photographerId = est récupéré par la fonction getPhotographerIdFromURL()
+    // La comparaison stricte '===' assure que l'ID est bien un nombre et pas une chaîne de caractères. Comparaison stricte qui vérifie à la fois la valeur et le type 
     // Le photographe trouvé est stocké dans la variable 'photographer'.
     const photographer = photographers.find(p => p.id === photographerId);
 
@@ -85,13 +86,11 @@ async function displayPhotographerDetails(photographerId) {
         // Ajout de l'image du photographe à la section de l'image
         imageSection.appendChild(img);
 
-        // Création de la modale de contact
+        ///////// MODALE DE CONTACT ////////////
         createModal();
-
         // Ajout du nom du photographe dans l'encart prévu de la modale
         const nameElement = document.querySelector(".photographer-name");
         nameElement.textContent = photographer.name; 
-
         // Gestion de l'ouverture et de la fermeture de la modale
         document.querySelector(".contact_button").addEventListener("click", openModal);
 
@@ -126,7 +125,7 @@ async function init() {
     if (photographerId) {
         await displayPhotographerDetails(photographerId);
     } else {
-        // Sinon, récupère et affiche les données des photographes...
+        // Sinon, récupère les données des photographes...
         const photographers = await getPhotographers();
         if (photographers) {
             displayData(photographers); // ... et affiche les vignettes des photographes en page Accueil

@@ -74,7 +74,7 @@ export function photographerTemplate(data) {
     function getSpecificElements() {
         // Création de l'élément <h2> pour le nom du photographe sur la page spécifique
         const h2 = document.createElement('h2');
-        // Définition d'un ID unique pour l'élément <h2> en utilisant l'ID du photographe
+        // Définition d'un ID unique pour l'élément <h2> en utilisant l'Id JSON du photographe
         h2.id = `photographer-name-specific-${id}`;
         // Définition du texte du titre avec le nom du photographe
         h2.textContent = name;
@@ -106,10 +106,10 @@ export function photographerTemplate(data) {
         return elements;
     }
 
-    // Création d'un objet résultat contenant les informations du photographe et les méthodes de création des éléments DOM
+    // Création d'un objet-résultat contenant les informations du photographe et les méthodes de création des éléments DOM
     const result = { name, picture, getUserCardDOM, getSpecificElements };
-    // Affichage de l'objet résultat dans la console (utilisé pour le débogage)
+    // Affichage de l'objet-résultat dans la console (utilisé pour le débogage)
     console.log(result);
-    // Retourne l'objet résultat pour permettre l'accès aux informations et méthodes depuis d'autres parties du code
+    // Retourne l'objet-résultat pour permettre l'accès aux informations et méthodes depuis d'autres parties du code
     return result;
 }
