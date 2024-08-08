@@ -262,6 +262,7 @@ function displayDailyPrice(price, totalLikes) {
 /////////////////////// FONCTION PRINCIPALE POUR AFFICHER LE CORPS DE LA PAGE PHOTOGRAPHE ///////////////////////////////////////////
 
 async function displayPhotographerPage() {
+    console.log("displayPhotographerPage")
     try {
         // Obtenir l'ID du photographe depuis l'URL
         const photographerId = getPhotographerIdFromURL(); // Récupère l'ID du photographe depuis l'URL
