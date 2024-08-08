@@ -1,7 +1,7 @@
 ////////////////////////  CREATIONAL DESIGN PATTERN => dédié à la création d'objets //////////////////////////////
 ////////////////////////////// LIGHTBOX /////////////////////////////////////////////////
 // Classe représentant une lightbox pour afficher des médias en plein écran = Modèle/Plan pour créer un objet Lightbox 
-export class Lightbox {
+class Lightbox {
     // "Constructor" = Initialisation des propriétés de l'objet Lightbox et crée les éléments nécessaires à l'affichage de la lightbox.
     // "This", dans le constructeur, se réfère à l'objet en cours de création permettant d'initialiser ses propres propriétés et de définir ses propres méthodes.
     // Ces propriétés et méthodes permettent à chaque instance de Lightbox de maintenir son propre état et de manipuler son propre DOM sans interférer avec d'autres instances si on appelle la classe Lightbox plusieurs fois.
@@ -234,3 +234,17 @@ export class Lightbox {
     }
 
 }
+
+/////////////// Fonction pour initialiser ou réinitialiser la lightbox (si il y en a déjà une de créée) ////////////////////////////////////
+export function ReinitializeLightbox() {
+    // Ancienne Lightbox
+    const existingLightbox = document.querySelector('.lightbox'); // Sélectionne la lightbox existante
+    if (existingLightbox) {
+        existingLightbox.remove(); // Supprime la lightbox si elle existe
+    }
+
+    // Nouvelle Lightbox
+    const lightbox = new Lightbox(); // Crée une nouvelle instance de Lightbox
+    lightbox.init(); // Initialise la lightbox
+}
+

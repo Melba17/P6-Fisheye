@@ -3,7 +3,7 @@
 // Cela permet de créer des vignettes pour chaque photographe sur la page d'accueil ou de générer des éléments spécifiques pour leur bannière perso dans la page du photographe, de manière modulaire.
 
 export function photographerTemplate(data) {
-    // Extraction des propriétés nécessaires du photographe à partir des données JSON
+    // Extraction des propriétés nécessaires du photographe depuis l'objet JSON 'data'
     const { id, name, portrait, city, country, tagline, price } = data;
     
     // Définition du chemin vers l'image du photographe dans le dossier assets

@@ -1,6 +1,6 @@
 /////////////////////////// PAGE PHOTOGRAPHE /////////////////////////////////////////////////////////
 import { MediaFactory } from '../patterns/mediaFactory.js'; // Importation de la classe MediaFactory pour la création des objets média
-import { Lightbox } from '../patterns/lightbox.js'; // Importation de la classe Lightbox pour gérer l'affichage des images ou vidéos en mode lightbox
+import { ReinitializeLightbox } from '../patterns/lightbox.js'; // Importation de la classe Lightbox pour gérer l'affichage des images ou vidéos en mode lightbox
 
 // Fonction pour récupérer toutes les données des photographes et des médias dans le fichier JSON = tout le fichier //
 // La fonction getData utilise la méthode fetch pour effectuer une requête HTTP au fichier JSON situé à l'URL "./data/photographers.json". Cette requête est envoyée par le navigateur au "serveur" c'est à dire ici l'environnement local (Live Server) pour obtenir les données du fichier JSON.
@@ -32,6 +32,7 @@ function getPhotographerIdFromURL() {
     const id = urlParams.get('id'); // Récupère/extrait la valeur du paramètre 'id' provenant de l'URL sous forme de chaîne de caractères
     return id ? parseInt(id) : null; // Retourne l'ID convertit sous forme de nombre ou null si l'ID n'existe pas
 }
+
 
 
 //////////////////////////////////////// BOUTON DE TRI //////////////////////////////////////////////////////
@@ -96,7 +97,7 @@ function createSortButton(medias, photographerName) {
 
 /**
  * Fonction pour déterminer et gérer les options de tri dans le menu déroulant
- * @param {Array} originalMedias - La liste des médias d'origine
+ * @param {Array} originalPhotographerMedias - La liste des médias d'origine
  * @param {string} photographerName - Le nom du photographe
  */
 // Les 2 paramètres proviennent de la fonction displayPhotographerPage plus bas
@@ -188,7 +189,7 @@ function sortButtonDOM(originalPhotographerMedias, photographerName) {
                     });
     
                     // Réinitialise la lightbox pour prendre en compte les nouveaux médias affichés
-                    reinitializeLightbox();
+                    ReinitializeLightbox();
                 });
             }
         });
@@ -207,7 +208,7 @@ function sortButtonDOM(originalPhotographerMedias, photographerName) {
         icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'; // Alterne la rotation de l'icône / "0deg" correspond à l'icône vers le haut et 180deg à l'icône vers le bas
     });
 
-    rearrangeOptions('popularite'); // La fonction de tri est active pour les sélections faites via le menu, mais elle ne se déclenche pas automatiquement au chargement initial de la page pour trier les médias. Donc lorsque la page est chargée, la galerie est affichée avec les médias dans leur ordre d'origine (JSON), et non triés par popularité. 'popularité' étant juste le 1er texte par défaut.
+    rearrangeOptions('popularite'); // La fonction de tri est active pour les sélections faites via le menu, mais elle ne se déclenche pas automatiquement au chargement initial de la page pour trier les médias. Donc lorsque la page est chargée, la galerie est affichée avec les médias dans leur ordre d'origine (JSON), et non triés par Popularité. 'popularite' étant juste la 1ère valeur par défaut.
 }
 
 //////////////////////////////////////////////// ENCART //////////////////////////////////////////////////////////////////
@@ -273,7 +274,7 @@ async function displayPhotographerPage() {
         const data = await getData(); // On appelle la fonction getData()...
         const medias = data.media; // ... pour récupèrer spécifiquement les médias du fichier JSON...
         const photographers = data.photographers; // ... et aussi récupèrer spécifiquement les photographes du fichier JSON
-        const photographer = photographers.find(p => p.id === photographerId); // Trouve le photographe correspondant à l'id / // p.id = données JSON, provient indirectement de la fonction getData() et photographerId = est récupéré par la fonction getPhotographerIdFromURL()
+        const photographer = photographers.find(p => p.id === photographerId); // Trouve le photographe correspondant à l'id / p.id = données JSON, provient indirectement de la fonction getData() et photographerId = est récupéré par la fonction getPhotographerIdFromURL()
         
         if (!photographer) {
             throw new Error("Photographe non trouvé.");
@@ -295,6 +296,7 @@ async function displayPhotographerPage() {
         
         let totalLikes = 0; // Initialise le compteur de totalLikes à 0
         // ...et ajoute ensuite le nombre total de likes pour l'encart
+        console.log(photographerMedias)
         photographerMedias.forEach(mediaData => {
             totalLikes += mediaData.likes; // Additionne les likes du média courant au total des likes accumulés "totalLikes" au moment ou la page du photographe en question est créée
             try {
@@ -312,24 +314,11 @@ async function displayPhotographerPage() {
         displayDailyPrice(photographer.price, totalLikes); // Affiche le prix par jour et le total des likes
 
         // Initialise ou réinitialise la lightbox
-        reinitializeLightbox(); 
+        ReinitializeLightbox(); 
     } catch (error) {
-        console.error('Une erreur est survenue :', error); // Affiche les erreurs éventuelles
+        console.error('Une erreur est survenue :', error); // Centralise et affiche les erreurs éventuelles de throw new Error
     }
 }
 
-// Fonction pour réinitialiser la lightbox si il y en a déjà une de créée
-function reinitializeLightbox() {
-    // Ancienne Lightbox
-    const existingLightbox = document.querySelector('.lightbox'); // Sélectionne la lightbox existante
-    if (existingLightbox) {
-        existingLightbox.remove(); // Supprime la lightbox si elle existe
-    }
-
-    // Nouvelle Lightbox
-    const lightbox = new Lightbox(); // Crée une nouvelle instance de Lightbox
-    lightbox.init(); // Initialise la lightbox
-}
-
-// Ajoute un gestionnaire d'événement pour appeler la fonction principale displayPhotographerPage, et gérer l'affichage de la page du photographe, lorsque le DOM est chargé.
+// Écouteur d'évènement: ce code dit au navigateur de déclencher la fonction displayPhotographerPage dès que le contenu HTML est complètement chargé et prêt
 document.addEventListener('DOMContentLoaded', displayPhotographerPage); 

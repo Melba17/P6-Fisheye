@@ -12,12 +12,12 @@ import { createModal, openModal } from "../utils/contactForm.js";
 async function getPhotographers() {
     try {
         // Méthode/Requête HTTP "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données/ressources du fichier = en bref, simule une API
-        // "await" = mot-clé utilisé pour attendre que la promesse/réponse renvoyée par la fonction async soit résolue/finie. S'utilise uniquement à l'intérieur des fonctions async
+        // "await" fetch = mot-clé utilisé pour attendre que la promesse/réponse renvoyée par la fonction fetch soit résolue/finie. S'utilise uniquement à l'intérieur des fonctions async
         const response = await fetch("./data/photographers.json");
         
-        // Vérifie que la réponse est correcte sinon on signale un problème
+        // Vérifie que l'objet réponse est correcte sinon on signale un problème
         if (!response.ok) {
-            // exemples "status" = 200 : OK - La requête a réussi, et la réponse contient les données demandées / 404 : Not Found - Le serveur n'a pas trouvé la ressource demandée / 500 : Internal Server Error - Une erreur s'est produite sur le serveur etc...
+            // exemples de "status" = 200 : La requête a réussi, et la réponse contient les données demandées / 404 : Le serveur n'a pas trouvé la ressource demandée / 500 : Une erreur s'est produite sur le serveur etc...
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
@@ -41,7 +41,7 @@ async function getPhotographers() {
 // Fonction pour récupérer l'ID du photographe à partir de l'URL
 
     function getPhotographerIdFromUrl() {
-        // Crée un nouvel objet URL basé sur l'URL actuelle
+        // Crée un nouvel objet URL basé sur l'URL complète actuelle
         const url = new URL(window.location.href);     
         // Récupère la valeur du paramètre 'id' de l'URL sous forme de chaîne de caractères
         const id = url.searchParams.get('id');  
@@ -103,17 +103,17 @@ async function displayPhotographerDetails(photographerId) {
 
 ///////////////// INSERTION DES ELEMENTS VIGNETTES DANS LE DOM POUR LA PAGE D'ACCUEIL /////////////////
 // Fonction pour insérer les vignettes des photographes dans le DOM pour la page d'accueil
-async function displayData(photographers) {
-    // Récupération de la section où l'on veut insérer les vignettes
-    const photographersSection = document.querySelector(".photographer_section");
+function displayData(photographers) {
+// Récupération de la section où l'on veut insérer les vignettes
+const photographersSection = document.querySelector(".photographer_section");
     
-    // On parcours le tableau pour ajouter le squelette des vignettes représentant chaque photographe / Méthode "forEach" qui itère la fonction fléchée (photographer)=>{} sur chaque objet(photographes) du tableau
-    photographers.forEach((photographer) => {
-        // Génération du modèle de photographe à l'aide de la fonction template
-        const photographerModel = photographerTemplate(photographer);
-        const userCardDOM = photographerModel.getUserCardDOM();       
-        // Ajout des vignettes à la section HTML DOM
-        photographersSection.appendChild(userCardDOM);
+// On parcours le tableau pour ajouter le squelette des vignettes représentant chaque photographe / Méthode "forEach" qui itère la fonction fléchée (photographer)=>{} sur chaque objet(photographes) du tableau
+photographers.forEach((photographer) => {
+    // Génération du modèle de photographe à l'aide de la fonction template
+    const photographerModel = photographerTemplate(photographer);
+    const userCardDOM = photographerModel.getUserCardDOM();       
+    // Ajout des vignettes à la section HTML DOM
+    photographersSection.appendChild(userCardDOM);
     });
 }
 

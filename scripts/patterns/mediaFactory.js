@@ -2,6 +2,7 @@
 //////////////////////// FACTORY PATTERN POUR PAGE INDIV PHOTOGRAPHE ////////////////////////////////////////
 
 // La classe Media définit les propriétés et les méthodes communes à tous les types de médias. Elle sert de modèle de base pour créer les objets médias, avec des propriétés comme title, photographerId, et photographerName, ainsi qu'une méthode de base display().
+// "This", se réfère à l'objet en cours de création permettant d'initialiser ses propres propriétés et de définir ses propres méthodes.
 class Media {
     /**
      * Constructeur de la classe Media.
@@ -9,7 +10,8 @@ class Media {
      * @param {string} photographerName - Le nom complet (au départ) du photographe.
      */
     constructor(data, photographerName) {
-        this.title = data.title; // "This", se réfère à l'objet en cours de création permettant d'initialiser ses propres propriétés et de définir ses propres méthodes. Ici, le titre du média (image ou vidéo).
+        // Ex: Instruction "this.title = data.title;" qui demande à la propriété "title" de l'objet en cours de création avec "this" d'aller récupérer la donnée ("data") concernant le titre ("title") et de la prendre/garder en tant que valeur
+        this.title = data.title;  // Récupère le titre du média (image ou vidéo).
         this.photographerId = data.photographerId; // Récupère l'id du photographe
         // photographerName est un paramètre passé au constructeur, contenant le nom complet du photographe sous forme de chaîne de caractères. split(' ')= méthode qui divise la chaîne photographerName en utilisant un espace comme délimiteur pour obtenir un tableau de mots (prénom, nom). [0] = sélectionne le premier mot du tableau
         this.photographerName = photographerName.split(' ')[0]; 
@@ -26,7 +28,7 @@ class ImageMedia extends Media {
     /**
      * Constructeur de la classe ImageMedia.
      * @param {Object} data - Les données spécifiques à l'image, comme le chemin et les likes.
-     * @param {string} photographerName - Le nom complet du photographe.
+     * @param {string} photographerName - Le prénom du photographe.
      */
     constructor(data, photographerName) {
         super(data, photographerName); // Appel du constructeur de la classe de base "Media" - La méthode "super" permet de passer les 2 paramètres (id du photographe et son prénom) de la classe de base par héritage
@@ -204,7 +206,7 @@ class VideoMedia extends Media {
         // Ajoute le conteneur principal (vidéo + contenu sous le média) au conteneur global du média
         mediaContainer.appendChild(contentWrapper);
     
-        // Sélectionne la section galerie dans le document
+        // Récupère la section galerie dans le document HTML
         const gallerySection = document.querySelector('.gallery_section');
         gallerySection.appendChild(mediaContainer); // Ajoute la vidéo à la section galerie
 
@@ -226,7 +228,7 @@ class VideoMedia extends Media {
             }
 
             this.liked = !this.liked; // Inverse l'état de l'image (donc true ou false) - est à false par défaut au départ
-            likesCount.textContent = this.likes; // Met à jour le nombre de likes affiché
+            likesCount.textContent = this.likes; // Met à jour le nombre de likes affiché sous le média en question
             totalLikesElement.textContent = totalLikes; // Met à jour le total des likes affiché dans l'encart
         };
     
@@ -246,15 +248,18 @@ class VideoMedia extends Media {
 }
 
 // Classe finale ou "fabrique" pour créer des instances des sous-classes (ImageMedia et VideoMedia) / Centralisation de la logique de création pour choisir entre ImageMedia et VideoMedia ce qui simplifie la gestion des objets (et permettrait éventuellement d'ajouter de nouveaux types de médias sans modifier le code de base).
-class MediaFactory {
+// "Export" de la classe MediaFactory pour utilisation dans photographer.js
+export class MediaFactory {
     /**
      * Crée une instance de média spécifique (image ou vidéo) en fonction des données fournies.
      * @param {Object} data - Les données du média comme : le chemin, le titre, et le nombre de likes.
      * @param {string} photographerName - Le prénom du photographe.
      * @returns {Media} Une instance de ImageMedia ou VideoMedia selon les données fournies.
      */
-    // "static" fait référence à la classe de base et non aux instances de celle-ci. Cela signifie aussi qu'on peut accéder directement à ses propriétés (ditent "static") sans avoir à créer une instance de cette classe. Création de la méthode createMedia.
+    // "static" fait référence à la classe de base et non aux instances de celle-ci. Cela signifie aussi qu'on peut accéder directement à ses propriétés (ditent "static") sans avoir à créer une instance de cette classe. 
+    // Centralisation de la logique de création des instances de ImageMedia et VideoMedia
     static createMedia(data, photographerName) {
+        console.log("MediaFactory")
         // Vérifie si les données contiennent un chemin pour une image.
         if (data.image) {
             // Instanciation/Création d'objets Images ou Vidéos
@@ -268,5 +273,5 @@ class MediaFactory {
     }
 }
 
-// Exporte la classe MediaFactory pour utilisation dans photographer.js
-export { MediaFactory };
+
+
