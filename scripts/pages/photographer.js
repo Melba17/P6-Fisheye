@@ -34,7 +34,6 @@ function getPhotographerIdFromURL() {
 }
 
 
-
 //////////////////////////////////////// BOUTON DE TRI //////////////////////////////////////////////////////
 /**
  * Fonction pour créer et insérer dynamiquement le bouton de tri
@@ -262,7 +261,6 @@ function displayDailyPrice(price, totalLikes) {
 /////////////////////// FONCTION PRINCIPALE POUR AFFICHER LE CORPS DE LA PAGE PHOTOGRAPHE ///////////////////////////////////////////
 
 export async function displayPhotographerPage() {
-    console.log("displayPhotographerPage")
     try {
         // Obtenir l'ID du photographe depuis l'URL
         const photographerId = getPhotographerIdFromURL(); // Récupère l'ID du photographe depuis l'URL
@@ -297,7 +295,6 @@ export async function displayPhotographerPage() {
         
         let totalLikes = 0; // Initialise le compteur de totalLikes à 0
         // ...et ajoute ensuite le nombre total de likes pour l'encart
-        console.log(photographerMedias)
         photographerMedias.forEach(mediaData => {
             totalLikes += mediaData.likes; // Additionne les likes du média courant au total des likes accumulés "totalLikes" au moment ou la page du photographe en question est créée
             try {
@@ -321,6 +318,3 @@ export async function displayPhotographerPage() {
     }
 }
 
-// Écouteur d'évènement: ce code dit au navigateur de déclencher la fonction displayPhotographerPage dès que le contenu HTML est complètement chargé et prêt
-// document.addEventListener('DOMContentLoaded', displayPhotographerPage); 
-// displayPhotographerPage()

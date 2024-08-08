@@ -259,7 +259,6 @@ export class MediaFactory {
     // "static" fait référence à la classe de base et non aux instances de celle-ci. Cela signifie aussi qu'on peut accéder directement à ses propriétés (ditent "static") sans avoir à créer une instance de cette classe. 
     // Centralisation de la logique de création des instances de ImageMedia et VideoMedia
     static createMedia(data, photographerName) {
-        console.log("MediaFactory")
         // Vérifie si les données contiennent un chemin pour une image.
         if (data.image) {
             // Instanciation/Création d'objets Images ou Vidéos
@@ -268,8 +267,7 @@ export class MediaFactory {
             return new VideoMedia(data, photographerName); 
         } else {
             throw new Error('Type de média inconnu.'); // Lance une erreur si le type de média est inconnu.
-        }
-        
+        }        
     }
 }
 
