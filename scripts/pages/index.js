@@ -5,6 +5,7 @@
 import { photographerTemplate } from "../templates/photographers.js";
 // Instruction qui importe les fonctions "createModal" et "openModal" à partir du module/fichier "contactForm.js" pour pouvoir l'utiliser ici
 import { createModal, openModal } from "../utils/contactForm.js";
+// Import de la fonction displayPhotographerPage ici pour permettre l'affichage complet de la page photographe dans le déploiement github notamment 
 import { displayPhotographerPage } from "../pages/photographer.js";
 
 // RECUPERATION DES DONNEES JSON 
@@ -38,9 +39,7 @@ async function getPhotographers() {
 // "try/catch" ou "throw new error" pour centraliser et gérer nous-même les erreurs si il y en a. Donc la console ne pourra plus afficher "uncaught".
 
 
-/////////////////// 2 FONCTIONS INTERDEPENDANTES : LA 1ERE EXTRAT l'ID DU PHOTOGRAPHE À PARTIR DE L'URL - LA 2EME UTILISE CET ID POUR AFFICHER LES DETAILS DU PHOTOGRAPHE DANS SA BANNIERE ////////////////////
 // Fonction pour récupérer l'ID du photographe à partir de l'URL
-
     function getPhotographerIdFromUrl() {
         // Crée un nouvel objet URL basé sur l'URL complète actuelle
         const url = new URL(window.location.href);     
@@ -118,22 +117,23 @@ photographers.forEach((photographer) => {
     });
 }
 
-//// AFFICHAGES FINALS : PAGE ACCUEIL ET BANNIERE PAGE PHOTOGRAPHE /////
+///////////// AFFICHAGES FINALS : PAGE ACCUEIL ET PAGE PHOTOGRAPHE ////////////
 async function init() {
     // Récupération de l'ID du photographe depuis l'URL
     const photographerId = getPhotographerIdFromUrl();
-    // Si un ID est présent, afficher les détails du photographe dans sa bannière
+    
     if (photographerId) {
+        // Pour la bannière...
         await displayPhotographerDetails(photographerId);
+        // ...et le reste de la page photographe
         displayPhotographerPage()
     } else {
         // Sinon, récupère les données des photographes...
         const photographers = await getPhotographers();
         if (photographers) {
-            displayData(photographers); // ... et affiche les vignettes des photographes en page Accueil
+            displayData(photographers); // ... pour afficher les vignettes des photographes en page Accueil
         }
     }
 }
-
 // Activation/Appel immédiat de la fonction
 init();

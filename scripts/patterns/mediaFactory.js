@@ -13,7 +13,7 @@ class Media {
         // Ex: Instruction "this.title = data.title;" qui demande à la propriété "title" de l'objet en cours de création avec "this" d'aller récupérer la donnée ("data") concernant le titre ("title") et de la prendre/garder en tant que valeur
         this.title = data.title;  // Récupère le titre du média (image ou vidéo).
         this.photographerId = data.photographerId; // Récupère l'id du photographe
-        // photographerName est un paramètre passé au constructeur, contenant le nom complet du photographe sous forme de chaîne de caractères. split(' ')= méthode qui divise la chaîne photographerName en utilisant un espace comme délimiteur pour obtenir un tableau de mots (prénom, nom). [0] = sélectionne le premier mot du tableau
+        // photographerName est un paramètre passé au constructeur, contenant le nom complet du photographe sous forme de chaîne de caractères. split(' ')= méthode qui divise la chaîne photographerName en utilisant un espace comme délimiteur pour obtenir un tableau de mots [prénom, nom]. [0] = sélectionne le premier mot du tableau
         this.photographerName = photographerName.split(' ')[0]; 
     }
 
@@ -227,9 +227,9 @@ class VideoMedia extends Media {
 
             }
 
-            this.liked = !this.liked; // Inverse l'état de l'image (donc true ou false) - est à false par défaut au départ
-            likesCount.textContent = this.likes; // Met à jour le nombre de likes affiché sous le média en question
-            totalLikesElement.textContent = totalLikes; // Met à jour le total des likes affiché dans l'encart
+            this.liked = !this.liked; // Inverse l'état de l'image (donc true ou false) / !! est à false par défaut au départ
+            likesCount.textContent = this.likes; // On rappelle la variable likesCount pour mettre à jour le nombre de likes affiché sous le média en question
+            totalLikesElement.textContent = totalLikes; // Met également à jour le total des likes affiché dans l'encart
         };
     
         // Ajoute un événement de clic pour l'icône de cœur.
@@ -256,7 +256,7 @@ export class MediaFactory {
      * @param {string} photographerName - Le prénom du photographe.
      * @returns {Media} Une instance de ImageMedia ou VideoMedia selon les données fournies.
      */
-    // "static" fait référence à la classe de base et non aux instances de celle-ci. Cela signifie aussi qu'on peut accéder directement à ses propriétés (ditent "static") sans avoir à créer une instance de cette classe. 
+    // "static" permet à la méthode createMedia() d'être appelée directement sur la classe MediaFactory sans qu'elle soit instanciée. En suite on utilise les mêmes paramètres que la classe Media de base.
     // Centralisation de la logique de création des instances de ImageMedia et VideoMedia
     static createMedia(data, photographerName) {
         // Vérifie si les données contiennent un chemin pour une image.

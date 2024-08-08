@@ -231,7 +231,7 @@ function displayDailyPrice(price, totalLikes) {
 
     const likesElement = document.createElement('div'); // Crée un élément div pour le nombre de likes
     likesElement.classList.add('total-likes'); // Ajoute une classe CSS pour le style
-    likesElement.textContent = `${totalLikes}`; // Définit le texte avec le nombre total de likes
+    likesElement.textContent = `${totalLikes}`; // Affiche le texte avec le nombre total de likes (le calcul se fait plus bas)
     likesElement.id = 'totalLikes'; // Ajoute un ID pour faciliter la mise à jour
 
     const heartIcon = document.createElement('i'); // Crée un élément i pour l'icône de cœur à côté de la div "likes_insert_container"
@@ -294,9 +294,9 @@ export async function displayPhotographerPage() {
         const originalPhotographerMedias = [...photographerMedias]; // Crée une copie des médias originaux du photographe avant tout tri ou manipulation. En stockant cette copie initiale ça garantit que les données utilisées pour les tris ultérieurs sont toujours basées sur l'état initial des médias pour le photographe en question.
         
         let totalLikes = 0; // Initialise le compteur de totalLikes à 0
-        // ...et ajoute ensuite le nombre total de likes pour l'encart
+        
         photographerMedias.forEach(mediaData => {
-            totalLikes += mediaData.likes; // Additionne les likes du média courant au total des likes accumulés "totalLikes" au moment ou la page du photographe en question est créée
+            totalLikes += mediaData.likes; // Additionne les likes du média courant au total des likes accumulés "totalLikes" au moment ou la page du photographe en question est créée = calcul et stockage
             try {
                 const media = MediaFactory.createMedia(mediaData, photographerName); // Crée un média avec MediaFactory... 
                 media.display(); // et l'affiche 
