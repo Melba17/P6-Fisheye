@@ -5,6 +5,7 @@
 import { photographerTemplate } from "../templates/photographers.js";
 // Instruction qui importe les fonctions "createModal" et "openModal" à partir du module/fichier "contactForm.js" pour pouvoir l'utiliser ici
 import { createModal, openModal } from "../utils/contactForm.js";
+import { displayPhotographerPage } from "../pages/photographer.js";
 
 // RECUPERATION DES DONNEES JSON 
 // opération asynchrone avec "async" et "await" pour traiter la réponse du serveur: c'est à dire permet au navigateur d'afficher normalement les infos à l'écran en attendant la réponse du serveur
@@ -124,6 +125,7 @@ async function init() {
     // Si un ID est présent, afficher les détails du photographe dans sa bannière
     if (photographerId) {
         await displayPhotographerDetails(photographerId);
+        displayPhotographerPage()
     } else {
         // Sinon, récupère les données des photographes...
         const photographers = await getPhotographers();

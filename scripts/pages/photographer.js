@@ -261,7 +261,7 @@ function displayDailyPrice(price, totalLikes) {
 
 /////////////////////// FONCTION PRINCIPALE POUR AFFICHER LE CORPS DE LA PAGE PHOTOGRAPHE ///////////////////////////////////////////
 
-async function displayPhotographerPage() {
+export async function displayPhotographerPage() {
     console.log("displayPhotographerPage")
     try {
         // Obtenir l'ID du photographe depuis l'URL
@@ -323,4 +323,4 @@ async function displayPhotographerPage() {
 
 // Écouteur d'évènement: ce code dit au navigateur de déclencher la fonction displayPhotographerPage dès que le contenu HTML est complètement chargé et prêt
 // document.addEventListener('DOMContentLoaded', displayPhotographerPage); 
-displayPhotographerPage()
+// displayPhotographerPage()
