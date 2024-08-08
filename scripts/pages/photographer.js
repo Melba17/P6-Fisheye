@@ -322,4 +322,5 @@ async function displayPhotographerPage() {
 }
 
 // Écouteur d'évènement: ce code dit au navigateur de déclencher la fonction displayPhotographerPage dès que le contenu HTML est complètement chargé et prêt
-document.addEventListener('DOMContentLoaded', displayPhotographerPage); 
+// document.addEventListener('DOMContentLoaded', displayPhotographerPage); 
+displayPhotographerPage()
