@@ -29,22 +29,22 @@ export function createModal() {
             <div>
                 <label for="first">Prénom</label>
                 <input class="text-control" type="text" id="first" name="first" />
-                <span class="error-message"></span>
+                <span id="first-error" class="error-message"></span>
             </div>
             <div>
                 <label for="last">Nom</label>
                 <input class="text-control" type="text" id="last" name="last" />
-                <span class="error-message"></span>
+                <span id="last-error" class="error-message"></span>
             </div>
             <div>
                 <label for="email">E-mail</label>
                 <input class="text-control" type="email" id="email" name="email" />
-                <span class="error-message"></span>
+                <span  id="email-error" class="error-message"></span>
             </div>
             <div>
                 <label for="message">Votre message</label>
                 <textarea name="message" id="message" class="text-control"></textarea>
-                <span class="error-message"></span>
+                <span  id="message-error" class="error-message"></span>
             </div>
             <button class="submit_button" type="submit">Envoyer</button>
         </form>
@@ -157,11 +157,15 @@ function toggleModal(show) {
         document.body.classList.toggle('no-scroll', show);
 
         if (show) {
+            // Cache le contenu de la page html principale
+            document.body.setAttribute('aria-hidden', 'true');
             // Assure que le focus reste dans la modale
             trapFocus(modal);
             // Ajoute un gestionnaire pour fermer la modale avec la touche Échap
             document.addEventListener('keydown', handleEscKey);
         } else {
+            // Affiche le contenu de la page principale
+            document.body.removeAttribute('aria-hidden');
             // Retire le gestionnaire pour fermer la modale avec la touche Échap
             document.removeEventListener('keydown', handleEscKey);
         }
@@ -301,7 +305,8 @@ function validateField(fieldId) {
     // Valide le champ et récupère le message d'erreur correspondant
     const condition = validators[fieldId](value);
     const errorMessage = errorMessages[fieldId];
-    const errorSpan = field.nextElementSibling;
+    // Sélectionne l'élément span pour le message d'erreur par ID
+    const errorSpan = document.getElementById(`${fieldId}-error`);
 
     if (!condition) {
         // Affiche le message d'erreur si la validation échoue
@@ -309,6 +314,7 @@ function validateField(fieldId) {
         if (errorSpan) {
             errorSpan.textContent = errorMessage;
             errorSpan.setAttribute('data-error-visible', 'true');
+            field.setAttribute('aria-describedby', `${fieldId}-error`);
         }
     } else {
         // Masque le message d'erreur si la validation réussit
@@ -316,6 +322,7 @@ function validateField(fieldId) {
         if (errorSpan) {
             errorSpan.textContent = '';
             errorSpan.setAttribute('data-error-visible', 'false');
+            field.setAttribute('aria-describedby', `${fieldId}-error`);
         }
     }
 
