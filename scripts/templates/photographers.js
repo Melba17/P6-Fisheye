@@ -11,7 +11,7 @@ export function photographerTemplate(data) {
 
     /// FONCTION POUR CRÉER LA VIGNETTE DE L'ACCUEIL ///
     function getUserCardDOM() {
-        // Création de la balise <article> pour contenir la vignette du photographe
+        // Création de la balise <article> pour contenir la vignette globale du photographe
         const article = document.createElement('article');
 
         // Création du lien <a> qui entoure l'image et le titre du photographe
@@ -64,8 +64,6 @@ export function photographerTemplate(data) {
         article.appendChild(p);
         article.appendChild(span);
 
-        // Affichage de l'article dans la console (utilisé pour le débogage)
-        console.log(article); 
         // Retourne l'élément DOM <article> qui représente la vignette complète du photographe
         return article;
     }
@@ -98,18 +96,16 @@ export function photographerTemplate(data) {
         // Définition de l'attribut alt de l'image avec le nom du photographe pour l'accessibilité
         img.setAttribute("alt", name);
 
-        // Création d'un objet contenant tous les éléments spécifiques à la page du photographe
+        // Création d'un objet contenant tous les éléments spécifiques à la page du photographe en question
         const elements = { h2, h3, strong, img };
-        // Affichage de l'objet dans la console (utilisé pour le débogage)
-        console.log(elements);
+        
         // Retourne l'objet contenant les éléments spécifiques - page du photographe
         return elements;
     }
 
     // Création d'un objet-résultat contenant les informations du photographe et les méthodes de création des éléments DOM
     const result = { name, picture, getUserCardDOM, getSpecificElements };
-    // Affichage de l'objet-résultat dans la console (utilisé pour le débogage)
-    console.log(result);
+
     // Retourne l'objet-résultat pour permettre l'accès aux informations et méthodes depuis d'autres parties du code
     return result;
 }

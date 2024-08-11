@@ -9,11 +9,10 @@ import { createModal, openModal } from "../utils/contactForm.js";
 import { displayPhotographerPage } from "../pages/photographer.js";
 
 // RECUPERATION DES DONNEES JSON 
-// opération asynchrone avec "async" et "await" pour traiter la réponse du serveur: c'est à dire permet au navigateur d'afficher normalement les infos à l'écran en attendant la réponse du serveur
-// "asynch" mot-clé qui permet à la fonction de s'exécuter même si cela prend du temps, sans bloquer l'exécution du reste du code
+// "asynch" et "await" mots-clés qui permettent à la fonction de s'exécuter même si cela prend du temps, sans bloquer l'exécution du reste du code
 async function getPhotographers() {
     try {
-        // Méthode/Requête HTTP "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données/ressources du fichier = en bref, simule une API
+        // Méthode/Requête HTTP "fetch" contenant le chemin vers fichier JSON (chemin relatif) pour récupérer les données/ressources du fichier = en bref, simule une API/BDD
         // "await" fetch = mot-clé utilisé pour attendre que la promesse/réponse renvoyée par la fonction fetch soit résolue/finie. S'utilise uniquement à l'intérieur des fonctions async
         const response = await fetch("./data/photographers.json");
         
@@ -26,9 +25,6 @@ async function getPhotographers() {
         // Ensuite, stockage de la réponse du serveur dans la variable "data" avec désérialisation du fichier JSON - ici réponse sous forme d'objet lisible par le navigateur
         const data = await response.json();
         
-        // Debugging : affichage des données récupérées dans la console
-        console.log('Données récupérées :', data);
-        
         // Retourne le tableau des photographes à partir des données JSON récupérées = instruction 
         return data.photographers;
     } catch (error) {
@@ -36,7 +32,7 @@ async function getPhotographers() {
         console.error('Erreur lors de la récupération des photographes :', error);
     }
 }
-// "try/catch" ou "throw new error" pour centraliser et gérer nous-même les erreurs si il y en a. Donc la console ne pourra plus afficher "uncaught".
+// "try/catch" et "throw new error" pour centraliser et gérer nous-même les erreurs si il y en a. Donc la console ne pourra plus afficher "uncaught".
 
 
 // Fonction pour récupérer l'ID du photographe à partir de l'URL
@@ -53,16 +49,14 @@ async function getPhotographers() {
 // Fonction asynchrone pour afficher les informations spécifiques d'un photographe dans sa bannière en fonction de son ID
 // "photographerId" est extrait de "getPhotographerIdFromUrl" au-dessus
 async function displayPhotographerDetails(photographerId) {
-    // Récupération des données JSON globales contenant la liste des photographes / fonction getPhotographers() ci-dessus
+    // Récupération des données JSON contenant la liste des photographes / fonction getPhotographers() ci-dessus
     const photographers = await getPhotographers();
     
     // find() = méthode qui utilise une fonction fléchée pour trouver le photographe 
-    // p.id = données JSON, provient indirectement de la fonction getPhotographers() et photographerId = est récupéré par la fonction getPhotographerIdFromURL()
+    // p.id = données JSON, provient indirectement de la fonction getPhotographers() et photographerId = est récupéré par la fonction getPhotographerIdFromURL() sur la page web
     // La comparaison stricte '===' assure que l'ID est bien un nombre et pas une chaîne de caractères. Comparaison stricte qui vérifie à la fois la valeur et le type 
     // Le photographe trouvé est stocké dans la variable 'photographer'.
     const photographer = photographers.find(p => p.id === photographerId);
-
-
 
     // Vérification si le photographe a été trouvé
     if (photographer) {
@@ -88,7 +82,7 @@ async function displayPhotographerDetails(photographerId) {
 
         ///////// MODALE DE CONTACT ////////////
         createModal();
-        // Ajout du nom du photographe dans l'encart prévu de la modale
+        // Ajout du nom du photographe dans l'espace prévu de la modale
         const nameElement = document.querySelector(".photographer-name");
         nameElement.textContent = photographer.name; 
         // Gestion de l'ouverture et de la fermeture de la modale

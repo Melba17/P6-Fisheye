@@ -28,17 +28,17 @@ export function createModal() {
         <form name="contactForm" action="" method="get" novalidate>
             <div>
                 <label for="first">Prénom</label>
-                <input class="text-control" type="text" id="first" name="first" />
+                <input class="text-control" type="text" id="first" name="first" autocomplete="first"/>
                 <span id="first-error" class="error-message"></span>
             </div>
             <div>
                 <label for="last">Nom</label>
-                <input class="text-control" type="text" id="last" name="last" />
+                <input class="text-control" type="text" id="last" name="last" autocomplete="last"/>
                 <span id="last-error" class="error-message"></span>
             </div>
             <div>
                 <label for="email">E-mail</label>
-                <input class="text-control" type="email" id="email" name="email" />
+                <input class="text-control" type="email" id="email" name="email" autocomplete="email"/>
                 <span  id="email-error" class="error-message"></span>
             </div>
             <div>
