@@ -19,9 +19,9 @@ export function createModal() {
     modalContainer.innerHTML = `
     <div class="modal">
         <header>
-            <div class="modal-header-content">
-                <h2>Contactez-moi</h2>
-                <div class="photographer-name"></div> 
+            <div>
+                <h2 id="contact_modal_title">Contactez-moi</h2>
+                <div id="photographer_name" class="photographer-name"></div> 
             </div>
             <button class="modal_close" type="button"></button>
         </header>
@@ -56,12 +56,8 @@ export function createModal() {
 
     // Configure l'attribut aria-labelledby pour indiquer quel photographe peut être contacté
     const modal = document.getElementById('contact_modal');
-    modal.setAttribute('aria-labelledby', 'contact_modal_title');
-    // Ajout de l'attribut id au h2
-    const modalTitle = document.querySelector('.modal-header-content h2');
-    if (modalTitle) {
-        modalTitle.id = 'contact_modal_title';
-    }
+    modal.setAttribute('aria-labelledby', 'contact_modal_title photographer_name');
+    
     
     // Ajoute un gestionnaire d'événements pour la croix de fermeture de la modale
     const closeButton = document.querySelector('.modal_close');
@@ -82,7 +78,8 @@ export function createModal() {
     const fields = ['first', 'last', 'email', 'message'];
     fields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
-        if (field) {
+        if (field) { 
+            // L'événement blur se déclenche lorsque l'élément perd le focus
             field.addEventListener('blur', () => {
                 validateField(fieldId);
                 logFieldValue(fieldId);

@@ -125,9 +125,7 @@
   position: absolute;
   background-color: #901c1c;
   width: 160px;
-  z-index: 1;
   border-radius: 5px;
-  overflow: hidden;
   margin-top: -5px;
 }
 

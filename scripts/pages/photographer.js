@@ -127,6 +127,8 @@ function sortButtonDOM(originalPhotographerMedias, photographerName) {
         dropdownButton.setAttribute("aria-label", `Menu de tri, option actuelle : ${selectedOption.text}`);
         // Vide le contenu actuel du menu déroulant pour le mettre à jour avec les nouvelles options = affichage dynamique
         dropdownContent.innerHTML = '';
+        
+        //////////////// CE QUI SE PASSE DANS LA GALERIE ET LE BOUTON DE TRI QUAND UNE OPTION EST SELECTIONNEE /////////////
         // Crée les boutons pour chaque option restante, c'est-à-dire celles qui ne sont pas actuellement sélectionnées
         options.forEach(option => {
             if (option.value !== selectedValue) {
@@ -141,6 +143,7 @@ function sortButtonDOM(originalPhotographerMedias, photographerName) {
                 // Définit l'attribut ARIA "aria-selected" à "false" pour indiquer que ce bouton n'est pas sélectionné
                 button.setAttribute("aria-selected", "false");
                 // Ajoute un attribut de données personnalisé "data-value" avec la valeur de l'option pour stocker les informations associées à l’élément qu'on peut utiliser pour diverses logiques, comme ici l'action de filtrage, sans interférer avec les attributs standard HTML. Les infos stockées ne sont pas destinées à être affichées directement mais utilisées dans le script JS.
+                
                 button.setAttribute("data-value", option.value);
                 // Définit l'attribut ARIA "aria-label" pour une meilleure accessibilité en fournissant une étiquette descriptive / toLowerCase() normalise le format de l'aria en convertissant tout en minuscules, ce qui peut éviter des incohérences dans la façon dont elles sont interprétées par les lecteurs d'écran. 
                 button.setAttribute("aria-label", `Tri par ${option.text.toLowerCase()}`);
@@ -156,7 +159,6 @@ function sortButtonDOM(originalPhotographerMedias, photographerName) {
                     // Appelle la fonction pour réorganiser les options restantes en fonction de la valeur du bouton cliqué/selectedValue
                     rearrangeOptions(option.value);
     
-                    //////////////// CE QUI SE PASSE DANS LA GALERIE ET LE BOUTON DE TRI QUAND UNE OPTION EST SELECTIONNEE /////////////
                     // Crée une copie de la copie des médias originaux (située dans la function displayPhotographerPage plus bas) à chaque fois qu'on choisit une option. La méthode sort() est destructive car elle réorganise les éléments du tableau d'origine en place. On manipule donc la copie créée lors du triage mais pas la copie initiale de sauvegarde de la liste/tableau d'origine.
                     const sortedMedias = [...originalPhotographerMedias];
                     // Trie les médias selon la valeur de l'option sélectionnée

@@ -21,7 +21,7 @@ class Lightbox {
         this.lightbox.id = 'lightbox'; // Assigne l'ID pour la lightbox pour permettre ensuite sa manipulation par diverses méthodes (afficher, la fermer, etc...)
         this.lightbox.style.display = 'none'; // Cache la lightbox par défaut
         this.lightbox.setAttribute('role', 'dialog'); // Définit le rôle ARIA pour la lightbox 
-        this.lightbox.setAttribute('aria-label', 'Média en plein écran'); // Définit l'étiquette ARIA pour la lightbox
+        this.lightbox.setAttribute('aria-label', 'Média ouvert en plein écran'); // Définit l'étiquette ARIA pour la lightbox
         // Contenu HTML de la lightbox
         this.lightbox.innerHTML = `
             <button class="lightbox_close" aria-label="Fermer la fenêtre" tabindex="0"></button>
