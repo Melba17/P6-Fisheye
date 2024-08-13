@@ -49,7 +49,7 @@ export function createModal() {
             <button class="submit_button" type="submit">Envoyer</button>
         </form>
     </div>
-`;
+    `;
 
     // Ajoute le conteneur de la modale au body du document
     document.body.appendChild(modalContainer);
@@ -326,6 +326,11 @@ function validateField(fieldId) {
     return condition;
 }
 
+// Fonction de validation finale
+function validateForm() {
+    // Valide chaque champ et retourne vrai si tous les champs sont valides 
+    return ['first', 'last', 'email', 'message'].every(validateField);
+}
 
 
 function resetForm() {
@@ -341,8 +346,4 @@ function resetForm() {
     }
 }
 
-// Fonction de validation finale
-function validateForm() {
-    // Valide chaque champ et retourne vrai si tous les champs sont valides 
-    return ['first', 'last', 'email', 'message'].every(validateField);
-}
+

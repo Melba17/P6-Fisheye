@@ -125,10 +125,11 @@ function sortButtonDOM(originalPhotographerMedias, photographerName) {
         dropdownButton.querySelector('span').textContent = selectedOption.text;
         // Met à jour l'étiquette ARIA du bouton pour refléter l'option actuellement sélectionnée
         dropdownButton.setAttribute("aria-label", `Menu de tri, option actuelle : ${selectedOption.text}`);
-        // Vide le contenu actuel du menu déroulant pour le mettre à jour avec les nouvelles options = affichage dynamique
-        dropdownContent.innerHTML = '';
         
-        //////////////// CE QUI SE PASSE DANS LA GALERIE ET LE BOUTON DE TRI QUAND UNE OPTION EST SELECTIONNEE /////////////
+       //////////////// CE QUI SE PASSE DANS LA GALERIE ET LE BOUTON DE TRI QUAND UNE OPTION EST SELECTIONNEE /////////////
+        // Vide le contenu actuel du menu déroulant pour le mettre à jour avec les nouvelles options = affichage dynamique
+        dropdownContent.innerHTML = ''; 
+        
         // Crée les boutons pour chaque option restante, c'est-à-dire celles qui ne sont pas actuellement sélectionnées
         options.forEach(option => {
             if (option.value !== selectedValue) {

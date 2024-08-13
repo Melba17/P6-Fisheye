@@ -219,8 +219,7 @@ class Lightbox {
     //// Initialise les éléments médias et les écouteurs d'événements dans la galerie du photographe pour pouvoir ouvrir la lightbox /////
     init() {
         document.querySelectorAll('.media_container img, .media_container video').forEach((media, index) => {
-            media.dataset.index = index; // Assigne une valeur index à l'attribut data-index de l'élément media pour savoir quel élément a été sélectionné et pouvoir le manipuler 
-            media.setAttribute('tabindex', '0'); // Rendre le média focusable pour la navigation au clavier
+            media.dataset.index = index; // Assigne une valeur index à l'attribut data-index de l'élément media pour savoir quel élément a été sélectionné et pouvoir le manipuler   
             media.addEventListener('click', () => this.openLightbox(index)); // Ouvre la lightbox lors d'un clic sur un média
             // @param {KeyboardEvent} event - L'événement clavier
             media.addEventListener('keydown', (event) => {
